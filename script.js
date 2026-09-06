@@ -51,7 +51,7 @@
 
   // ---------- Live Roblox game data (name, icon, visits, active players, likes) ----------
   // Change this to whichever placeId you want the site to pull live data from.
-  const PLACE_ID = '97770628016535';
+ const PLACE_ID = '2753915549';
 
   async function fetchGameStats(){
     try {
