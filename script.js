@@ -49,21 +49,24 @@
   }, { threshold: 0.15 });
   revealEls.forEach(el => io.observe(el));
 
-  // Live Roblox game stats (visits, active players, likes)
+  // ---------- Live Roblox game data (name, icon, visits, active players, likes) ----------
+  // Change this to whichever placeId you want the site to pull live data from.
   const PLACE_ID = '97770628016535';
 
   async function fetchGameStats(){
     try {
       const universeRes = await fetch(`https://apis.roproxy.com/universes/v1/places/${PLACE_ID}/universe`);
-      if (!universeRes.ok) throw new Error('universe lookup failed');
+      if (!universeRes.ok) throw new Error('universe lookup failed: ' + universeRes.status);
       const universeData = await universeRes.json();
       const universeId = universeData.universeId;
+      if (!universeId) throw new Error('no universeId returned for this placeId');
 
-      const [gameRes, votesRes] = await Promise.all([
+      const [gameRes, votesRes, iconRes] = await Promise.all([
         fetch(`https://games.roproxy.com/v1/games?universeIds=${universeId}`),
-        fetch(`https://games.roproxy.com/v1/games/votes?universeIds=${universeId}`)
+        fetch(`https://games.roproxy.com/v1/games/votes?universeIds=${universeId}`),
+        fetch(`https://thumbnails.roproxy.com/v1/games/icons?universeIds=${universeId}&size=512x512&format=Png&isCircular=false`)
       ]);
-      if (!gameRes.ok || !votesRes.ok) throw new Error('game data fetch failed');
+      if (!gameRes.ok || !votesRes.ok) throw new Error('game data fetch failed: ' + gameRes.status + ' / ' + votesRes.status);
 
       const gameData = await gameRes.json();
       const votesData = await votesRes.json();
@@ -73,12 +76,26 @@
       const visitsEl = document.getElementById('statVisits');
       const playersEl = document.getElementById('statPlayers');
       const likesEl = document.getElementById('statLikes');
+      const nameEl = document.getElementById('gameName');
+      const iconImgEl = document.getElementById('gameIconImg');
+      const iconLetterEl = document.getElementById('gameIconLetter');
 
       if (info && visitsEl) visitsEl.dataset.count = info.visits;
       if (info && playersEl) playersEl.dataset.count = info.playing;
       if (votes && likesEl) likesEl.dataset.count = votes.upVotes;
+      if (info && nameEl) nameEl.textContent = info.name;
+
+      if (iconRes.ok) {
+        const iconData = await iconRes.json();
+        const iconInfo = iconData.data && iconData.data[0];
+        if (iconInfo && iconInfo.imageUrl && iconImgEl) {
+          iconImgEl.src = iconInfo.imageUrl;
+          iconImgEl.style.display = 'block';
+          if (iconLetterEl) iconLetterEl.style.display = 'none';
+        }
+      }
     } catch (err) {
-      console.warn('Could not load live Zeramon stats, showing fallback numbers.', err);
+      console.warn('Could not load live Zeramon game data, showing fallback name/icon/numbers.', err);
     }
   }
   fetchGameStats();
