@@ -3,285 +3,1453 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zeramon Studio</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-
-<meta property="og:title" content="Zeramon Studio">
-<meta property="og:description" content="Visit the official website of Zeramon Studio, the team behind Zeramon Adventures. You will be able to access the Wiki throught our website, to see our officials socials and to see our Team Members.">
-<meta property="og:image" content="https://zeramonadventures.github.io/website/embed-banner.jpg">
-<meta property="og:url" content="https://zeramonadventures.github.io/website/">
-<meta property="og:type" content="website">
-<meta name="theme-color" content="#1c4fd8">
-<meta name="twitter:card" content="summary_large_image">
+<title>Zeramon — Catch. Train. Battle. On Roblox.</title>
+<link rel="icon" type="image/png" href="assets/images/zeramon-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#050914;
+    --navy-900:#0A1330;
+    --navy-800:#101B44;
+    --blue-700:#1739B0;
+    --blue-600:#2554E0;
+    --blue-500:#3B6BFF;
+    --blue-400:#6E93FF;
+    --cyan-400:#5EE6FF;
+    --white:#FFFFFF;
+    --ice-100:#EEF3FF;
+    --ice-200:#DCE7FC;
+    --slate-700:#4A5875;
+    --slate-500:#7C89A8;
+    --slate-900:#0C1730;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --radius-sm:12px;
+    --ease-out: cubic-bezier(.16,1,.3,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--ice-100);
+    color:var(--slate-900);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block;}
+  button{font-family:inherit;border:none;cursor:pointer;background:none;}
+
+  ::selection{background:var(--blue-500);color:#fff;}
+
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk',sans-serif;
+    letter-spacing:-0.01em;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ===================== LOADER ===================== */
+  #loader{
+    position:fixed;inset:0;
+    background:
+      radial-gradient(60% 50% at 50% 38%, rgba(59,107,255,.22), transparent 70%),
+      radial-gradient(120% 140% at 50% 20%, var(--navy-800) 0%, var(--navy-950) 65%);
+    z-index:999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:opacity .8s var(--ease-out), visibility .8s var(--ease-out), filter .8s var(--ease-out);
+  }
+  #loader.hide{opacity:0;visibility:hidden;pointer-events:none;filter:blur(6px);}
+  #loader::before{
+    content:'';
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(60% 55% at 50% 42%, black, transparent 80%);
+  }
+
+  .loader-scene{
+    position:relative;
+    width:208px;height:236px;
+    display:flex;align-items:center;justify-content:center;
+    animation:loaderFloat 4.5s ease-in-out infinite;
+  }
+  @keyframes loaderFloat{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+  }
+  .loader-aura{
+    position:absolute;
+    width:260px;height:260px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(94,230,255,.55), rgba(59,107,255,0) 30%, rgba(94,230,255,0) 70%, rgba(94,230,255,.55));
+    filter:blur(22px);
+    opacity:.55;
+    animation:spin 6s linear infinite;
+  }
+  .loader-orbit{
+    position:absolute;inset:0;
+    animation:spin 9s linear infinite;
+  }
+  .loader-orbit span{
+    position:absolute;
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--cyan-400);
+    box-shadow:0 0 10px 3px rgba(94,230,255,.85);
+    top:0;left:50%;
+    transform:translateX(-50%);
+  }
+  .loader-orbit span:nth-child(2){top:auto;bottom:14px;left:12px;width:4px;height:4px;box-shadow:0 0 8px 2px rgba(94,230,255,.7);}
+  .loader-orbit span:nth-child(3){top:auto;bottom:22px;right:6px;left:auto;width:3px;height:3px;box-shadow:0 0 6px 2px rgba(94,230,255,.6);}
+
+  .loader-hex-outline{
+    position:absolute;inset:0;width:100%;height:100%;overflow:visible;
+  }
+  .loader-hex-outline polygon{
+    fill:none;
+    stroke:url(#hexLoaderGradient);
+    stroke-width:2;
+    stroke-linejoin:round;
+    stroke-dasharray:1;
+    stroke-dashoffset:1;
+    animation:drawHex 1.7s var(--ease-out) forwards .15s;
+    filter:drop-shadow(0 0 8px rgba(94,230,255,.5));
+  }
+  @keyframes drawHex{to{stroke-dashoffset:0;}}
+
+  .loader-hex-fill{
+    position:absolute;
+    width:132px;height:150px;
+    clip-path:polygon(50% 2%, 96% 26%, 96% 74%, 50% 98%, 4% 74%, 4% 26%);
+    background:linear-gradient(160deg, var(--blue-600) 0%, var(--blue-700) 55%, var(--navy-900) 100%);
+    box-shadow:inset 0 2px 3px rgba(255,255,255,.4), inset 0 -14px 22px rgba(0,0,0,.3);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;
+    animation:fillIn .7s var(--ease-out) forwards 1.1s;
+  }
+  @keyframes fillIn{to{opacity:1;}}
+  .loader-hex-fill::after{
+    content:'';
+    position:absolute;left:18%;top:10%;
+    width:26%;height:16%;
+    border-radius:50%;
+    background:rgba(255,255,255,.35);
+    filter:blur(9px);
+  }
+
+  .z-mark{
+    position:relative;z-index:2;
+    width:46px;height:46px;
+    animation:zFloat 3.4s ease-in-out infinite 1.4s;
+    transform-origin:center;
+  }
+  .z-mark path{
+    fill:none;
+    stroke:#fff;
+    stroke-width:7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:220;
+    stroke-dashoffset:220;
+    animation:drawZ 1s var(--ease-out) forwards 1.3s;
+    filter:drop-shadow(0 0 10px rgba(59,107,255,.9));
+  }
+  @keyframes drawZ{to{stroke-dashoffset:0;}}
+  @keyframes zFloat{
+    0%,100%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-4px) scale(1.03);}
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .loader-word{
+    margin-top:26px;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:15px;
+    letter-spacing:0.32em;
+    color:var(--ice-200);
+    display:flex;
+    gap:2px;
+  }
+  .loader-progress{
+    margin-top:18px;
+    width:150px;height:3px;
+    border-radius:100px;
+    background:rgba(255,255,255,.1);
+    overflow:hidden;
+  }
+  .loader-progress-bar{
+    height:100%;
+    width:0%;
+    border-radius:100px;
+    background:linear-gradient(90deg, var(--blue-500), var(--cyan-400));
+    box-shadow:0 0 10px rgba(94,230,255,.6);
+    transition:width .22s linear;
+  }
+  .loader-percent{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--slate-500);
+    font-variant-numeric:tabular-nums;
+    letter-spacing:0.05em;
+  }
+
+  /* ===================== BACKDROP DECORATION ===================== */
+  .field-orbs{
+    position:fixed;inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .field-orbs span{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(2px);
+    opacity:.5;
+  }
+
+  /* ===================== NAV ===================== */
+  header.site-nav{
+    position:fixed;top:0;left:0;right:0;
+    z-index:60;
+    padding:20px 0;
+    transition:background .4s ease, box-shadow .4s ease, padding .4s ease, backdrop-filter .4s ease;
+  }
+  header.site-nav.scrolled{
+    background:rgba(10,19,48,0.72);
+    backdrop-filter:blur(16px) saturate(160%);
+    box-shadow:0 8px 30px rgba(6,12,32,.18);
+    padding:14px 0;
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--white);
+    opacity:0;
+    transform:translateY(-10px);
+  }
+  .brand-mark{
+    width:34px;height:34px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .brand-mark img{
+    width:100%;height:100%;
+    object-fit:contain;
+    filter:drop-shadow(0 4px 10px rgba(37,84,224,.45));
+  }
+  .nav-links{
+    display:flex;align-items:center;gap:38px;
+    opacity:0;
+    transform:translateY(-10px);
+  }
+  .nav-links a{
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--ice-200);
+    position:relative;
+    padding:4px 0;
+    transition:color .25s ease;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;left:0;bottom:0;
+    width:0;height:1.5px;background:var(--cyan-400);
+    transition:width .3s var(--ease-out);
+  }
+  .nav-links a:hover{color:#fff;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    padding:11px 22px;
+    border-radius:100px;
+    background:linear-gradient(135deg, var(--blue-500), var(--blue-700));
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    box-shadow:0 6px 18px rgba(37,84,224,.4);
+    transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+    opacity:0;
+    transform:translateY(-10px);
+  }
+  .nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(37,84,224,.55);}
+
+  .nav-toggle{
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    gap:5px;
+    width:30px;height:30px;
+    opacity:0;
+  }
+  .nav-toggle span{
+    display:block;height:2px;width:100%;
+    background:#fff;border-radius:2px;
+    transition:transform .3s var(--ease-out), opacity .3s ease;
+  }
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle.open span:nth-child(2){opacity:0;}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  .mobile-menu{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:55;
+    background:rgba(6,11,26,0.97);
+    backdrop-filter:blur(18px);
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .45s var(--ease-out);
+    display:flex;flex-direction:column;
+    padding:0 24px;
+  }
+  .mobile-menu.open{
+    max-height:420px;
+    padding:88px 24px 32px;
+  }
+  .mobile-menu a{
+    font-size:17px;
+    font-weight:500;
+    color:var(--ice-200);
+    padding:14px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .mobile-menu .btn{
+    margin-top:20px;
+    justify-content:center;
+  }
+
+  body.loaded .brand,
+  body.loaded .nav-links,
+  body.loaded .nav-cta,
+  body.loaded .nav-toggle{
+    animation:navIn .8s var(--ease-out) forwards;
+  }
+  body.loaded .nav-links{animation-delay:.08s;}
+  body.loaded .nav-cta{animation-delay:.16s;}
+  body.loaded .nav-toggle{animation-delay:.16s;}
+  @keyframes navIn{to{opacity:1;transform:translateY(0);}}
+
+  /* ===================== HERO ===================== */
+  #hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    background:var(--navy-950);
+    overflow:hidden;
+    padding:140px 0 100px;
+  }
+  .hero-bg-image{
+    position:absolute;inset:0;
+    z-index:0;
+    /* PLACEHOLDER: mets ton image de fond ici (ex: assets/images/background1.jpg) */
+    background-image:url('assets/images/background1.jpg');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+  }
+  .hero-bg-filter{
+    position:absolute;inset:0;
+    z-index:1;
+    background:
+      radial-gradient(90% 60% at 15% 0%, rgba(59,107,255,.45), transparent 60%),
+      radial-gradient(70% 50% at 100% 10%, rgba(94,230,255,.22), transparent 55%),
+      linear-gradient(180deg, rgba(5,9,20,.82) 0%, rgba(10,19,48,.72) 55%, rgba(16,27,68,.85) 100%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    position:relative;z-index:2;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:40px;
+    align-items:center;
+  }
+  .eyebrow-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:7px 14px 7px 8px;
+    border-radius:100px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.12);
+    font-size:12.5px;
+    color:var(--ice-200);
+    font-weight:500;
+    opacity:0;transform:translateY(14px);
+  }
+  .eyebrow-pill .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--cyan-400);
+    box-shadow:0 0 8px 2px rgba(94,230,255,.7);
+    animation:pulseDot 1.8s ease-in-out infinite;
+  }
+  @keyframes pulseDot{0%,100%{opacity:1;}50%{opacity:.35;}}
+
+  .hero-title{
+    font-size:clamp(52px, 7vw, 92px);
+    line-height:.96;
+    font-weight:700;
+    color:#fff;
+    margin:22px 0 22px;
+    opacity:0;transform:translateY(24px);
+  }
+  .hero-title span{
+    background:linear-gradient(100deg, #fff 10%, var(--cyan-400) 35%, var(--blue-400) 55%, #fff 75%, var(--cyan-400) 95%);
+    background-size:280% 100%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:titleShimmer 6s linear infinite;
+  }
+  @keyframes titleShimmer{
+    0%{background-position:0% 50%;}
+    100%{background-position:-280% 50%;}
+  }
+  .hero-copy{
+    max-width:480px;
+    font-size:17.5px;
+    line-height:1.65;
+    color:var(--ice-200);
+    opacity:0;transform:translateY(24px);
+  }
+  .hero-ctas{
+    display:flex;gap:14px;margin-top:36px;
+    opacity:0;transform:translateY(24px);
+  }
+  .btn{
+    padding:15px 26px;
+    border-radius:100px;
+    font-size:15px;
+    font-weight:600;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:transform .35s var(--ease-out), box-shadow .35s var(--ease-out), background .3s ease;
+  }
+  .btn-primary{
+    position:relative;
+    background:linear-gradient(135deg, var(--blue-500), var(--cyan-400), var(--blue-700));
+    background-size:220% 220%;
+    background-position:0% 50%;
+    color:#fff;
+    box-shadow:0 10px 30px rgba(37,84,224,.45);
+    transition:transform .35s var(--ease-out), box-shadow .35s var(--ease-out), background-position .6s ease;
+  }
+  .btn-primary:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 18px 42px rgba(37,84,224,.65), 0 0 30px rgba(94,230,255,.35);background-position:100% 50%;}
+  .btn-ghost{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .btn-ghost::before{
+    content:'';
+    position:absolute;inset:0;
+    background:linear-gradient(120deg, transparent, rgba(94,230,255,.25), transparent);
+    transform:translateX(-120%);
+    transition:transform .6s var(--ease-out);
+  }
+  .btn-ghost:hover{background:rgba(255,255,255,.12);transform:translateY(-3px);border-color:rgba(94,230,255,.4);}
+  .btn-ghost:hover::before{transform:translateX(120%);}
+
+  body.loaded .eyebrow-pill,
+  body.loaded .hero-title,
+  body.loaded .hero-copy,
+  body.loaded .hero-ctas{
+    animation:heroIn 1s var(--ease-out) forwards;
+  }
+  body.loaded .hero-title{animation-delay:.1s;}
+  body.loaded .hero-copy{animation-delay:.22s;}
+  body.loaded .hero-ctas{animation-delay:.32s;}
+  @keyframes heroIn{to{opacity:1;transform:translateY(0);}}
+
+  /* --- 3D hexagon logo scene --- */
+  .hex-stage{
+    position:relative;
+    height:460px;
+    perspective:1200px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .hex-aura{
+    position:absolute;
+    width:380px;height:380px;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(94,230,255,.35), rgba(59,107,255,0) 28%, rgba(94,230,255,0) 72%, rgba(94,230,255,.35));
+    filter:blur(38px);
+    opacity:.7;
+    animation:spin 14s linear infinite;
+    pointer-events:none;
+  }
+  .hex-scene{
+    position:relative;
+    width:220px;height:250px;
+    transform-style:preserve-3d;
+    animation:hexFloat 6s ease-in-out infinite;
+  }
+  @keyframes hexFloat{
+    0%,100%{transform:translateY(0) rotateX(10deg) rotateY(-8deg);}
+    50%{transform:translateY(-18px) rotateX(10deg) rotateY(2deg);}
+  }
+  .hex-face{
+    position:absolute;
+    left:15px;right:15px;top:15px;bottom:15px;
+    clip-path:polygon(50% 2%, 97% 26%, 97% 74%, 50% 98%, 3% 74%, 3% 26%);
+  }
+  .hex-back{
+    background:linear-gradient(160deg, var(--blue-700) 0%, var(--navy-900) 100%);
+    transform:translateZ(-20px) scale(1.05);
+    box-shadow:0 40px 80px -20px rgba(10,19,48,.65);
+  }
+  .hex-front{
+    background:var(--blue-600);
+    box-shadow:
+      inset 0 2px 3px rgba(255,255,255,.5),
+      inset 0 -14px 26px rgba(0,0,0,.25),
+      0 40px 80px -20px rgba(20,50,180,.6),
+      0 0 90px rgba(59,107,255,.35);
+    display:flex;align-items:center;justify-content:center;
+    transform:translateZ(1px);
+    overflow:hidden;
+    animation:hexGlowPulse 3.6s ease-in-out infinite;
+  }
+  @keyframes hexGlowPulse{
+    0%,100%{box-shadow:inset 0 2px 3px rgba(255,255,255,.5), inset 0 -14px 26px rgba(0,0,0,.25), 0 40px 80px -20px rgba(20,50,180,.6), 0 0 90px rgba(59,107,255,.35);}
+    50%{box-shadow:inset 0 2px 3px rgba(255,255,255,.5), inset 0 -14px 26px rgba(0,0,0,.25), 0 40px 80px -20px rgba(20,50,180,.6), 0 0 130px rgba(94,230,255,.5);}
+  }
+  .hex-front img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+  }
+  .hex-front::after{
+    content:'';
+    position:absolute;left:16%;top:12%;
+    width:30%;height:18%;
+    border-radius:50%;
+    background:rgba(255,255,255,.4);
+    filter:blur(10px);
+    z-index:2;
+  }
+
+  .scroll-cue{
+    position:absolute;
+    left:50%;bottom:34px;
+    transform:translateX(-50%);
+    width:1px;height:34px;
+    background:linear-gradient(180deg, var(--cyan-400), transparent);
+    opacity:0;
+    animation:cueFade 1s var(--ease-out) forwards 1.1s, cueMove 2s ease-in-out infinite;
+  }
+  @keyframes cueFade{to{opacity:.7;}}
+  @keyframes cueMove{0%,100%{transform:translateX(-50%) scaleY(1);opacity:.6;}50%{transform:translateX(-50%) scaleY(.6);opacity:1;}}
+
+  /* ===================== SECTION HEADERS ===================== */
+  .section{
+    position:relative;
+    padding:120px 0;
+  }
+  .section-head{
+    max-width:620px;
+    margin-bottom:64px;
+  }
+  .section-head h2{
+    font-size:clamp(32px,4vw,46px);
+    font-weight:700;
+    color:var(--slate-900);
+    line-height:1.08;
+  }
+  .section-head p{
+    margin-top:16px;
+    font-size:16.5px;
+    line-height:1.65;
+    color:var(--slate-700);
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(30px) scale(.98);
+    transition:opacity .9s var(--ease-out), transform .9s var(--ease-out);
+  }
+  .reveal.in-view{opacity:1;transform:translateY(0) scale(1);}
+
+  /* ===================== GAME PANEL ===================== */
+  #game{
+    background:var(--white);
+  }
+  .game-panel{
+    position:relative;
+    border-radius:var(--radius-lg);
+    background:linear-gradient(155deg, var(--navy-900), var(--navy-950));
+    padding:52px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:48px;
+    align-items:center;
+    overflow:hidden;
+    box-shadow:0 40px 80px -30px rgba(15,27,54,.45);
+  }
+  .game-panel::before{
+    content:'';
+    position:absolute;inset:0;
+    background:radial-gradient(60% 90% at 100% 0%, rgba(94,230,255,.15), transparent 60%);
+    pointer-events:none;
+  }
+  .game-icon-block{
+    display:flex;flex-direction:column;align-items:center;gap:16px;
+    position:relative;z-index:1;
+  }
+  .game-icon{
+    width:132px;height:132px;
+    border-radius:30px;
+    background:linear-gradient(150deg, var(--blue-400), var(--blue-700) 70%);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 20px 40px -12px rgba(37,84,224,.6), inset 0 2px 2px rgba(255,255,255,.35), inset 0 -6px 14px rgba(0,0,0,.25);
+    position:relative;
+  }
+  .game-icon svg{width:66px;height:66px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35));}
+  .game-icon::after{
+    content:'';
+    position:absolute;inset:0;
+    border-radius:30px;
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .game-name{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    color:#fff;
+    font-size:15.5px;
+  }
+  .game-status{
+    display:flex;align-items:center;gap:6px;
+    font-size:12px;color:var(--cyan-400);
+    font-weight:500;
+  }
+  .game-status .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--cyan-400);
+    box-shadow:0 0 6px 2px rgba(94,230,255,.8);
+    animation:pulseDot 1.8s ease-in-out infinite;
+  }
+
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+    position:relative;z-index:1;
+  }
+  .stat-card{
+    padding:26px 22px;
+    border-radius:var(--radius-md);
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.09);
+    transition:transform .35s var(--ease-out), background .35s ease, border-color .35s ease;
+  }
+  .stat-card:hover{
+    transform:translateY(-6px);
+    background:rgba(255,255,255,.08);
+    border-color:rgba(94,230,255,.35);
+  }
+  .stat-num{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:34px;
+    font-weight:700;
+    color:#fff;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat-label{
+    margin-top:8px;
+    font-size:13px;
+    color:var(--slate-500);
+    font-weight:500;
+  }
+
+  /* ===================== LINKS / SOCIAL ===================== */
+  #links{background:var(--ice-100);}
+  .social-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+  }
+  .social-card{
+    position:relative;
+    padding:30px 26px;
+    border-radius:var(--radius-md);
+    background:#fff;
+    border:1px solid rgba(15,27,54,.07);
+    box-shadow:0 1px 2px rgba(15,27,54,.04);
+    transform-style:preserve-3d;
+    transition:box-shadow .4s var(--ease-out), border-color .4s ease;
+    overflow:hidden;
+  }
+  .social-card::before{
+    content:'';
+    position:absolute;inset:0;
+    background:linear-gradient(160deg, rgba(37,84,224,.07), transparent 55%);
+    opacity:0;
+    transition:opacity .4s ease;
+  }
+  .social-card:hover{
+    box-shadow:0 26px 50px -20px rgba(37,84,224,.35);
+    border-color:rgba(37,84,224,.25);
+  }
+  .social-card:hover::before{opacity:1;}
+  .social-icon{
+    width:48px;height:48px;
+    border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:22px;
+    color:#fff;
+    position:relative;z-index:1;
+  }
+  .social-icon svg{width:22px;height:22px;}
+  .social-card h3{
+    font-size:16.5px;font-weight:600;
+    margin-bottom:6px;
+    position:relative;z-index:1;
+  }
+  .social-card p{
+    font-size:13.5px;color:var(--slate-700);
+    position:relative;z-index:1;
+  }
+  .social-handle{
+    margin-top:16px;
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:600;
+    color:var(--blue-600);
+    position:relative;z-index:1;
+  }
+  .social-handle svg{width:13px;height:13px;transition:transform .3s var(--ease-out);}
+  .social-card:hover .social-handle svg{transform:translateX(4px);}
+
+  /* ===================== TEAM ===================== */
+  #team{background:#fff;}
+  .team-block{margin-bottom:64px;}
+  .team-block:last-child{margin-bottom:0;}
+  .team-block-label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--blue-600);
+    margin-bottom:22px;
+    padding-bottom:14px;
+    border-bottom:1px solid rgba(15,27,54,.09);
+  }
+
+  .owner-card{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:34px;
+    align-items:center;
+    padding:38px;
+    border-radius:var(--radius-lg);
+    background:linear-gradient(155deg, var(--navy-900), var(--navy-950));
+    box-shadow:0 30px 60px -25px rgba(15,27,54,.4);
+    transform-style:preserve-3d;
+  }
+  .owner-card .avatar-ph{width:120px;height:120px;}
+  .owner-card .member-name{color:#fff;font-size:22px;}
+  .owner-card .member-job{color:var(--cyan-400);}
+  .owner-card .member-name::after{background:rgba(255,255,255,.28);}
+
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:22px;
+  }
+  .team-grid.staff-grid{grid-template-columns:repeat(4, 1fr);}
+
+  .member-card{
+    padding:28px 22px;
+    border-radius:var(--radius-md);
+    background:var(--ice-100);
+    border:1px solid rgba(15,27,54,.06);
+    text-align:center;
+    transform-style:preserve-3d;
+    transition:box-shadow .4s var(--ease-out), background .4s ease;
+  }
+  .member-card:hover{
+    box-shadow:0 24px 46px -22px rgba(37,84,224,.35);
+    background:#fff;
+  }
+
+  .avatar-ph{
+    width:84px;height:84px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    background:linear-gradient(150deg, var(--blue-400), var(--blue-700));
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    overflow:hidden;
+    box-shadow:inset 0 2px 3px rgba(255,255,255,.35), inset 0 -4px 10px rgba(0,0,0,.2);
+  }
+  .avatar-ph img{
+    width:100%;height:100%;
+    object-fit:cover;
+    border-radius:50%;
+  }
+  .avatar-ph::after{
+    content:'';
+    position:absolute;inset:-4px;
+    border-radius:50%;
+    border:1.5px dashed rgba(37,84,224,.35);
+  }
+  .owner-card .avatar-ph::after{border-color:rgba(94,230,255,.45);}
+
+  .member-name{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:15.5px;
+    color:var(--slate-900);
+    position:relative;
+    display:inline-block;
+  }
+  .member-name::after{
+    content:'';
+    position:absolute;left:0;right:0;bottom:-3px;
+    height:1px;
+    background:rgba(15,27,54,.18);
+  }
+  .member-job{
+    margin-top:9px;
+    font-size:12.5px;
+    font-weight:500;
+    color:var(--blue-600);
+    letter-spacing:.01em;
+  }
+  .owner-card .member-job{opacity:.9;}
+  .owner-tag{
+    display:inline-block;
+    margin-bottom:10px;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--slate-500);
+    letter-spacing:.08em;
+  }
+
+  /* ===================== JOIN / RECRUIT ===================== */
+  #join{
+    background:
+      radial-gradient(70% 90% at 85% 10%, rgba(94,230,255,.16), transparent 55%),
+      linear-gradient(180deg, var(--navy-900) 0%, var(--navy-950) 100%);
+    padding:110px 0;
+  }
+  .join-panel{
+    max-width:680px;
+    margin:0 auto;
+    text-align:center;
+  }
+  .join-panel .eyebrow-pill{
+    opacity:1;transform:none;
+    margin-bottom:20px;
+  }
+  .join-panel h2{
+    font-size:clamp(30px,4vw,42px);
+    font-weight:700;
+    color:#fff;
+    line-height:1.1;
+  }
+  .join-panel p{
+    margin-top:16px;
+    font-size:16.5px;
+    line-height:1.65;
+    color:var(--ice-200);
+  }
+  .role-pills{
+    display:flex;flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin:28px 0 32px;
+  }
+  .role-pills span{
+    padding:9px 18px;
+    border-radius:100px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.14);
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ice-200);
+  }
+  .join-note{
+    margin-top:18px;
+    font-size:13px;
+    color:var(--slate-500);
+  }
+
+  /* ===================== FOOTER ===================== */
+  footer{
+    background:var(--navy-950);
+    color:var(--slate-500);
+    padding:56px 0 34px;
+  }
+  .footer-top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-bottom:34px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    flex-wrap:wrap;
+    gap:24px;
+  }
+  .footer-brand{
+    display:flex;align-items:center;gap:10px;
+    color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;
+  }
+  .footer-links{display:flex;gap:30px;flex-wrap:wrap;}
+  .footer-links a{font-size:13.5px;color:var(--slate-500);transition:color .25s ease;}
+  .footer-links a:hover{color:#fff;}
+  .footer-bottom{
+    padding-top:26px;
+    display:flex;justify-content:space-between;
+    font-size:12.5px;
+    flex-wrap:wrap;gap:10px;
+  }
+  .footer-bottom .disclaimer{max-width:520px;color:rgba(124,137,168,.7);}
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width:980px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hex-stage{height:340px;order:-1;}
+    .game-panel{grid-template-columns:1fr;text-align:center;}
+    .stat-row{grid-template-columns:1fr 1fr 1fr;}
+    .social-grid{grid-template-columns:1fr 1fr;}
+    .team-grid{grid-template-columns:repeat(3,1fr);}
+    .team-grid.staff-grid{grid-template-columns:repeat(2,1fr);}
+    .owner-card{grid-template-columns:1fr;text-align:center;justify-items:center;}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 20px;}
+    .nav-links{display:none;}
+    .nav-cta{display:none;}
+    .nav-toggle{display:flex;}
+    .stat-row{grid-template-columns:1fr;gap:16px;}
+    .social-grid{grid-template-columns:1fr;}
+    .team-grid,.team-grid.staff-grid{grid-template-columns:1fr 1fr;}
+    .game-panel{padding:34px 24px;}
+    .section{padding:80px 0;}
+    .footer-top,.footer-bottom{flex-direction:column;align-items:flex-start;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+  }
+</style>
 </head>
 <body>
 
+  <!-- ===================== LOADER ===================== -->
   <div id="loader">
-    <div class="loader-core">
-      <svg viewBox="0 0 150 150">
-        <polygon class="core-hex" points="75,14 128,44 128,104 75,134 22,104 22,44"></polygon>
-        <path class="core-z" d="M55,55 L97,55 L55,97 L97,97"></path>
+    <div class="loader-scene">
+      <div class="loader-aura"></div>
+      <div class="loader-orbit"><span></span><span></span><span></span></div>
+      <svg class="loader-hex-outline" viewBox="0 0 200 230">
+        <defs>
+          <linearGradient id="hexLoaderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#5EE6FF"/>
+            <stop offset="100%" stop-color="#3B6BFF"/>
+          </linearGradient>
+        </defs>
+        <polygon points="100,6 188,60 188,170 100,224 12,170 12,60" pathLength="1"/>
       </svg>
+      <div class="loader-hex-fill">
+        <svg class="z-mark" viewBox="0 0 60 60">
+          <path d="M14 16 H46 L14 44 H46"/>
+        </svg>
+      </div>
     </div>
     <div class="loader-word" id="loaderWord"></div>
-    <div class="loader-tag">Loading the world</div>
+    <div class="loader-progress"><div class="loader-progress-bar" id="loaderBar"></div></div>
+    <div class="loader-percent"><span id="loaderPercent">0</span>%</div>
   </div>
 
-  <header id="siteHeader">
-    <a href="#top" class="brand">
-      <svg class="brand-mark" viewBox="0 0 40 40">
-        <polygon points="20,3 35,11.5 35,28.5 20,37 5,28.5 5,11.5" fill="none" stroke="#1c4fd8" stroke-width="2.4"></polygon>
-        <path d="M14,15 L26,15 L14,26 L26,26" fill="none" stroke="#1c4fd8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-      </svg>
-      <span class="brand-name">ZERAMON</span>
-    </a>
-    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="nav-overlay" id="navOverlay"></div>
-    <nav id="siteNav">
-      <ul>
-        <li><a href="#game" class="nav-link">Play</a></li>
-        <li><a href="#socials" class="nav-link">Socials</a></li>
-        <li><a href="#team" class="nav-link">Team</a></li>
-        <li><a href="https://www.roblox.com/games/97770628016535/Zeramon-Staging" target="_blank" rel="noopener" class="btn btn-primary">Play now</a></li>
-      </ul>
-    </nav>
+  <!-- background ambient orbs -->
+  <div class="field-orbs">
+    <span style="width:420px;height:420px;top:-120px;left:-140px;background:radial-gradient(circle,rgba(59,107,255,.18),transparent 70%);"></span>
+    <span style="width:360px;height:360px;top:40%;right:-160px;background:radial-gradient(circle,rgba(94,230,255,.14),transparent 70%);"></span>
+    <span style="width:300px;height:300px;bottom:-100px;left:20%;background:radial-gradient(circle,rgba(37,84,224,.12),transparent 70%);"></span>
+  </div>
+
+  <!-- ===================== NAV ===================== -->
+  <header class="site-nav" id="siteNav">
+    <div class="wrap nav-inner">
+      <div class="brand">
+        <span class="brand-mark">
+          <img src="assets/images/zeramon-logo.png" alt="Zeramon logo">
+        </span>
+        Zeramon
+      </div>
+      <nav class="nav-links">
+        <a href="#game">Play</a>
+        <a href="#links">Community</a>
+        <a href="#team">Team</a>
+        <a href="#join">Careers</a>
+      </nav>
+      <a href="#game" class="nav-cta">Play on Roblox</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </header>
 
-  <section class="hero" id="top">
-    <div class="hero-particles" id="particles"></div>
-    <div class="halftone-overlay"></div>
-    <div class="hero-content">
-      <svg class="speed-burst" viewBox="0 0 600 600" aria-hidden="true">
-        <g stroke="#7bd7ff" stroke-width="1.4" opacity="0.35">
-          <line x1="300" y1="300" x2="300" y2="10"/>
-          <line x1="300" y1="300" x2="470" y2="60"/>
-          <line x1="300" y1="300" x2="560" y2="200"/>
-          <line x1="300" y1="300" x2="590" y2="300"/>
-          <line x1="300" y1="300" x2="560" y2="400"/>
-          <line x1="300" y1="300" x2="470" y2="540"/>
-          <line x1="300" y1="300" x2="300" y2="590"/>
-          <line x1="300" y1="300" x2="130" y2="540"/>
-          <line x1="300" y1="300" x2="40" y2="400"/>
-          <line x1="300" y1="300" x2="10" y2="300"/>
-          <line x1="300" y1="300" x2="40" y2="200"/>
-          <line x1="300" y1="300" x2="130" y2="60"/>
-        </g>
-      </svg>
-      <div class="hero-eyebrow"><span class="pulse-dot"></span> Soon on Roblox</div>
-      <h1>Catch them. Train them.<br><span class="accent">Become legendary.</span></h1>
-      <p class="lead">Zeramon takes you across living regions, lets you catch unique creatures, and pits you against other trainers online — right in your browser, nothing to install.</p>
-      <div class="hero-actions">
-        <a href="https://www.roblox.com/games/97770628016535/Zeramon-Staging" target="_blank" rel="noopener" class="btn btn-primary">▶ Play on Roblox</a>
-        <a href="#team" class="btn btn-ghost on-dark">Meet the team</a>
-      </div>
-    </div>
-    <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
-  </section>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#game" data-menu-link>Play</a>
+    <a href="#links" data-menu-link>Community</a>
+    <a href="#team" data-menu-link>Team</a>
+    <a href="#join" data-menu-link>Careers</a>
+    <a href="#game" class="btn btn-primary" data-menu-link>Play on Roblox</a>
+  </div>
 
-  <section id="game" class="panel-cut">
-    <div class="section-head reveal">
-      <div class="section-eyebrow">The Game</div>
-      <h2>A live Zeramon adventure</h2>
-      <p>The stats below reflect the live activity of the Roblox experience.</p>
-    </div>
-
-    <div class="game-panel reveal">
-      <div class="game-icon">
-        <span id="gameIconLetter">Z</span>
-        <img id="gameIconImg" alt="Game icon" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:26px;">
-      </div>
-      <div class="game-info">
-        <h3 id="gameName">ZERAMON</h3>
-        <p class="subtitle">Multiplayer capture &amp; battle experience — by the Zeramon team</p>
-        <div class="stat-row">
-          <div class="stat">
-            <div class="num mono" id="statVisits" data-count="482300">0</div>
-            <div class="lbl">Visits</div>
-          </div>
-          <div class="stat">
-            <div class="num mono" id="statPlayers" data-count="1240">0</div>
-            <div class="lbl">Active players</div>
-          </div>
-          <div class="stat">
-            <div class="num mono" id="statLikes" data-count="36900">0</div>
-            <div class="lbl">Likes</div>
+  <main>
+    <!-- ===================== HERO ===================== -->
+    <section id="hero">
+      <div class="hero-bg-image"></div>
+      <div class="hero-bg-filter"></div>
+      <div class="wrap hero-inner">
+        <div>
+          <span class="eyebrow-pill"><span class="dot"></span>Live on Roblox now</span>
+          <h1 class="hero-title">Catch what<br>others can't <span>tame.</span></h1>
+          <p class="hero-copy">Zeramon is a creature-collecting adventure built for Roblox — explore untamed regions, capture wild Zeramon, and battle your way to becoming a Champion.</p>
+          <div class="hero-ctas">
+            <a href="#game" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              Play on Roblox
+            </a>
+            <a href="#links" class="btn btn-ghost">Join the community</a>
           </div>
         </div>
-        <div class="play-row">
-          <a href="https://www.roblox.com/games/97770628016535/Zeramon-Staging" target="_blank" rel="noopener" class="btn btn-primary">▶ Launch experience</a>
+
+        <div class="hex-stage" id="hexStage">
+          <div class="hex-aura"></div>
+          <div class="hex-scene" id="hexScene">
+            <div class="hex-face hex-back"></div>
+            <div class="hex-face hex-front">
+              <img src="assets/images/zeramon-logo.png" alt="Zeramon logo">
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="scroll-cue"></div>
+    </section>
+
+    <!-- ===================== GAME / STATS ===================== -->
+    <section id="game" class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>The game, live.</h2>
+          <p>Real numbers pulled straight from the Roblox experience — see how the world of Zeramon is growing right now.</p>
+        </div>
+
+        <div class="game-panel reveal">
+          <div class="game-icon-block">
+            <div class="game-icon">
+              <img id="gameIconImg" src="assets/images/zeramon-logo.png" alt="Zeramon logo" style="width:78%;height:78%;object-fit:contain;">
+            </div>
+            <div class="game-name" id="gameNameText">Zeramon</div>
+            <div class="game-status"><span class="dot"></span>Servers online</div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-num" data-stat="visits" data-count="12400000" data-suffix="+">0</div>
+              <div class="stat-label">Total visits</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" data-stat="playing" data-count="3218">0</div>
+              <div class="stat-label">Active players</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-num" data-stat="likes" data-count="541000" data-suffix="+">0</div>
+              <div class="stat-label">Likes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LINKS ===================== -->
+    <section id="links" class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Follow Zeramon</h2>
+          <p>News, sneak peeks, and updates go out here first. Pick your platform.</p>
+        </div>
+
+        <div class="social-grid reveal">
+          <a class="social-card tilt" href="#" target="_blank" rel="noopener">
+            <div class="social-icon" style="background:#000;">
+              <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.5 3c.4 2.2 1.9 3.8 4.5 4v3c-1.6 0-3.1-.5-4.5-1.4v6.6c0 3.4-2.7 6.1-6.1 6.1S4.3 18.6 4.3 15.2 7 9.1 10.4 9.1c.4 0 .8 0 1.2.1v3.1c-.4-.1-.8-.2-1.2-.2-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3V3h3.1z"/></svg>
+            </div>
+            <h3>TikTok</h3>
+            <p>Fast updates, clips &amp; teasers.</p>
+            <span class="social-handle">@playzeramon <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+
+          <a class="social-card tilt" href="#" target="_blank" rel="noopener">
+            <div class="social-icon" style="background:linear-gradient(150deg,#ff4d4d,#b30000);">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.2-.4-4.7c-.3-.9-1-1.6-1.9-1.9C18.2 5 12 5 12 5s-6.2 0-7.7.4c-.9.3-1.6 1-1.9 1.9C2 8.8 2 12 2 12s0 3.2.4 4.7c.3.9 1 1.6 1.9 1.9C5.8 19 12 19 12 19s6.2 0 7.7-.4c.9-.3 1.6-1 1.9-1.9.4-1.5.4-4.7.4-4.7zM10 15.2V8.8L15.5 12 10 15.2z"/></svg>
+            </div>
+            <h3>YouTube</h3>
+            <p>Trailers, devlogs &amp; deep dives.</p>
+            <span class="social-handle">Zeramon <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+
+          <a class="social-card tilt" href="#" target="_blank" rel="noopener">
+            <div class="social-icon" style="background:linear-gradient(150deg,#1a1a1a,#000);">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 3h3.2l-7 8 8.2 10h-6.4l-5-6.5L3.8 21H.6l7.5-8.6L0 3h6.5l4.5 6z"/></svg>
+            </div>
+            <h3>X (Twitter)</h3>
+            <p>Announcements &amp; behind the scenes.</p>
+            <span class="social-handle">@ZeramonGame <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+
+          <a class="social-card tilt" href="#" target="_blank" rel="noopener">
+            <div class="social-icon" style="background:linear-gradient(150deg,#7289fa,#4a56c9);">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>
+            </div>
+            <h3>Discord</h3>
+            <p>Chat, events &amp; player support.</p>
+            <span class="social-handle">Join server <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+
+          <a class="social-card tilt" href="#" target="_blank" rel="noopener">
+            <div class="social-icon" style="background:linear-gradient(150deg,var(--blue-400),var(--blue-700));">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg>
+            </div>
+            <h3>Roblox Group</h3>
+            <p>Join for perks &amp; group rewards.</p>
+            <span class="social-handle">Zeramon Official <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+
+          <a class="social-card tilt" href="#" target="_blank" rel="noopener">
+            <div class="social-icon" style="background:linear-gradient(150deg,var(--blue-400),var(--blue-700));">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H18a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H19" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 7h7M8 10h7" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Wiki</h3>
+            <p>Zeramon list, mechanics &amp; guides.</p>
+            <span class="social-handle">Read the wiki <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TEAM ===================== -->
+    <section id="team" class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <h2>Meet the team</h2>
+          <p>The people building, running and growing Zeramon every day.</p>
+        </div>
+
+        <!-- Owner -->
+        <div class="team-block reveal">
+          <div class="owner-card tilt">
+            <div class="avatar-ph">
+              <img src="assets/images/team/owner.png" alt="Owner">
+            </div>
+            <div>
+              <span class="owner-tag">FOUNDER</span>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Owner &amp; Creative Director</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Developers -->
+        <div class="team-block reveal">
+          <div class="team-block-label">Developers</div>
+          <div class="team-grid">
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/dev1.png" alt="Dev 1"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Lead Developer</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/dev2.png" alt="Dev 2"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Developer</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/dev3.png" alt="Dev 3"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Developer</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/dev4.png" alt="Dev 4"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Developer</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/dev5.png" alt="Dev 5"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Developer</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Staff -->
+        <div class="team-block reveal">
+          <div class="team-block-label">Staff</div>
+          <div class="team-grid staff-grid">
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/admin.png" alt="Admin"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Admin</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/cm.png" alt="Community Manager"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Community Manager</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/qa.png" alt="QA Manager"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">QA Manager</div>
+            </div>
+            <div class="member-card tilt">
+              <div class="avatar-ph"><img src="assets/images/team/ccm.png" alt="Content Creator Manager"></div>
+              <div class="member-name">Full Name</div>
+              <div class="member-job">Content Creator Manager</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== JOIN / RECRUIT ===================== -->
+  <section id="join" class="section">
+    <div class="wrap">
+      <div class="join-panel reveal">
+        <span class="eyebrow-pill"><span class="dot"></span>We're hiring</span>
+        <h2>Build Zeramon with us — and get paid for it</h2>
+        <p>We work with scripters, artists and builders on real, paid tasks. Join our Discord server to see open roles, apply, and get matched with a contribution that fits your skills.</p>
+        <div class="role-pills">
+          <span>2D Artist</span>
+          <span>Scripter</span>
+          <span>UI Designer</span>
+          <span>Modeler</span>
+          <span>VFX Artist</span>
+          <span>SFX Designer</span>
+          <span>Builder</span>
+          <span>Animator</span>
+        </div>
+        <a href="#" class="btn btn-primary">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>
+          Join the Discord server
+        </a>
+        <div class="join-note">Open to all skill levels — show us your work, we'll find the right task for you.</div>
       </div>
     </div>
   </section>
 
-  <section id="socials" class="panel-cut" style="background:#fff;">
-    <div class="section-head reveal">
-      <div class="section-eyebrow">Community</div>
-      <h2>Follow Zeramon everywhere</h2>
-      <p>News, behind the scenes, and live events across all our official channels.</p>
-    </div>
-    <div class="socials-grid reveal">
-      <a href="#" class="social-card">
-        <div class="social-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16 3c.5 2.6 2.1 4.2 5 4.5v3.1c-1.8.1-3.4-.4-5-1.4v6.3A6.5 6.5 0 1 1 9.7 9.1v3.3a3.3 3.3 0 1 0 2.8 3.3V3H16z" fill="currentColor"/></svg>
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <span class="brand-mark" style="width:26px;height:26px;">
+            <img src="assets/images/zeramon-logo.png" alt="Zeramon logo">
+          </span>
+          Zeramon
         </div>
-        <h4>TikTok</h4>
-        <p>Clips &amp; tips</p>
-      </a>
-      <a href="#" class="social-card">
-        <div class="social-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M23 12s0-3.6-.5-5.3c-.3-1-1-1.8-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.5.5c-1 .2-1.7 1-2 2C1 8.4 1 12 1 12s0 3.6.5 5.3c.3 1 1 1.8 2 2 1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5c1-.2 1.7-1 2-2 .5-1.7.5-5.3.5-5.3zM9.8 15.5V8.5l6.4 3.5-6.4 3.5z" fill="currentColor"/></svg>
+        <div class="footer-links">
+          <a href="#hero">Home</a>
+          <a href="#game">Play</a>
+          <a href="#links">Community</a>
+          <a href="#team">Team</a>
+          <a href="#join">Careers</a>
         </div>
-        <h4>YouTube</h4>
-        <p>Trailers &amp; gameplay</p>
-      </a>
-      <a href="#" class="social-card">
-        <div class="social-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.9 2h3.3l-7.2 8.2L23.5 22h-6.6l-5.2-6.8L5.7 22H2.4l7.7-8.8L1.5 2h6.8l4.7 6.2L18.9 2z" fill="currentColor"/></svg>
-        </div>
-        <h4>X (Twitter)</h4>
-        <p>Official announcements</p>
-      </a>
-      <a href="https://discord.gg/kvsRArNm8n" target="_blank" rel="noopener" class="social-card">
-        <div class="social-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.3 5.4A17.6 17.6 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0A8.3 8.3 0 0 0 10 4a17.6 17.6 0 0 0-4.4 1.4C2.6 9.3 1.9 13 2.2 16.7A17.7 17.7 0 0 0 7.6 19c.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.8-.9l.4-.3c3.4 1.6 7.1 1.6 10.5 0l.4.3c-.6.4-1.2.7-1.8.9.3.7.7 1.3 1.1 1.9a17.6 17.6 0 0 0 5.4-2.3c.4-4.3-.6-8-2.6-11.3zM9.7 14.3c-1 0-1.8-.9-1.8-2.1 0-1.1.8-2.1 1.8-2.1s1.9 1 1.8 2.1c0 1.2-.8 2.1-1.8 2.1zm5.1 0c-1 0-1.8-.9-1.8-2.1 0-1.1.8-2.1 1.8-2.1s1.9 1 1.8 2.1c0 1.2-.8 2.1-1.8 2.1z" fill="currentColor"/></svg>
-        </div>
-        <h4>Discord</h4>
-        <p>Chat &amp; hang out</p>
-      </a>
-      <a href="https://www.roblox.com/communities/5085788/Depx-i" target="_blank" rel="noopener" class="social-card">
-        <div class="social-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="currentColor"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="currentColor"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="currentColor"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="currentColor"/></svg>
-        </div>
-        <h4>Roblox Group</h4>
-        <p>Join the community</p>
-      </a>
-      <a href="#" class="social-card">
-        <div class="social-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4.5C4 3.7 4.7 3 5.5 3H12v18H5.5c-.8 0-1.5-.7-1.5-1.5v-15z" fill="currentColor"/><path d="M20 4.5c0-.8-.7-1.5-1.5-1.5H12v18h6.5c.8 0 1.5-.7 1.5-1.5v-15z" fill="currentColor" opacity="0.55"/></svg>
-        </div>
-        <h4>Wiki</h4>
-        <p>Guides &amp; lore</p>
-      </a>
-    </div>
-  </section>
-
-  <section id="team" class="panel-cut">
-    <div class="section-head reveal">
-      <div class="section-eyebrow">The Team</div>
-      <h2>The trainers behind Zeramon</h2>
-      <p>A small, passionate team building and running the world of Zeramon every day.</p>
-    </div>
-
-    <div class="team-tier-label reveal">Owner</div>
-    <div class="owner-card reveal">
-      <div class="avatar-ph filled">
-        <img src="assets/team/owner.png" alt="Depx_i">
       </div>
-      <div class="member-name">Depx_i</div>
-      <div class="role-badge">Owner / Founder</div>
-    </div>
-
-    <div class="team-tier-label reveal">Developers</div>
-    <div class="devs-grid reveal">
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev1.png" alt="MoonLight"></div>
-        <div class="member-name">MoonLight</div>
-        <div class="role-badge light">Developer</div>
+      <div class="footer-bottom">
+        <span>© 2026 Zeramon. All rights reserved.</span>
+        <span class="disclaimer">Zeramon is an independent Roblox experience and is not affiliated with, endorsed by, or sponsored by Roblox Corporation or Nintendo/The Pokémon Company.</span>
       </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev2.png" alt="Tan"></div>
-        <div class="member-name">Tan</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev3.png" alt="Haos_Dino"></div>
-        <div class="member-name">Haos_Dino</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev4.png" alt="vtntosu"></div>
-        <div class="member-name">vtntosu</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev5.png" alt="tommy590590"></div>
-        <div class="member-name">tommy590590</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev6.png" alt="wright"></div>
-        <div class="member-name">wright</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev7.png" alt="Tiến Võ"></div>
-        <div class="member-name">Tiến Võ</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/dev8.png" alt="roomyyy"></div>
-        <div class="member-name">roomyyy</div>
-        <div class="role-badge light">Developer</div>
-      </div>
-    </div>
-
-    <div class="team-tier-label reveal">Staff</div>
-    <div class="staff-grid reveal">
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/admin.png" alt="ED"></div>
-        <div class="member-name">ED</div>
-        <div class="role-badge light">Admin</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/cm.png" alt="TeGiyu"></div>
-        <div class="member-name">TeGiyu</div>
-        <div class="role-badge light">Community Manager</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/qa.png" alt="Galaxy"></div>
-        <div class="member-name">Galaxy</div>
-        <div class="role-badge light">QA Manager</div>
-      </div>
-      <div class="team-card">
-        <div class="avatar-ph light filled"><img src="assets/team/ccm.png" alt="Adam"></div>
-        <div class="member-name">Adam</div>
-        <div class="role-badge light">Content Creator Manager</div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="panel-cut">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <svg width="30" height="30" viewBox="0 0 40 40">
-          <polygon points="20,3 35,11.5 35,28.5 20,37 5,28.5 5,11.5" fill="none" stroke="#7bd7ff" stroke-width="2.4"></polygon>
-          <path d="M14,15 L26,15 L14,26 L26,26" fill="none" stroke="#7bd7ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-        <span>ZERAMON</span>
-      </div>
-      <div class="footer-links">
-        <a href="#game">Play</a>
-        <a href="#socials">Socials</a>
-        <a href="#team">Team</a>
-        <a href="https://discord.gg/kvsRArNm8n" target="_blank" rel="noopener">Discord</a>
-        <a href="#">Wiki</a>
-        <a href="https://www.roblox.com/communities/5085788/Depx-i" target="_blank" rel="noopener">Roblox Group</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Zeramon. Independent project, not affiliated with Roblox Corporation or Pokémon.</span>
-      <span>Site made by Its_ed007</span>
     </div>
   </footer>
 
-<script src="script.js" defer></script>
+<script>
+  // =====================================================================
+  // LIVE ROBLOX STATS — configure these two lines once your worker is live
+  // =====================================================================
+  const ZERAMON_PLACE_ID = "0000000000"; // <-- your Roblox place ID (from the game URL)
+  const STATS_WORKER_URL = "https://zeramon-stats.YOUR-SUBDOMAIN.workers.dev"; // <-- your deployed worker URL
 
+  async function loadLiveStats(){
+    if(!ZERAMON_PLACE_ID || ZERAMON_PLACE_ID === "0000000000") return; // not configured yet, keep placeholder numbers
+    try{
+      const res = await fetch(`${STATS_WORKER_URL}/?placeId=${ZERAMON_PLACE_ID}`);
+      if(!res.ok) throw new Error("worker responded with " + res.status);
+      const data = await res.json();
+      if(data.error) throw new Error(data.error);
+
+      if(data.name){
+        document.getElementById('gameNameText').textContent = data.name;
+      }
+      if(data.iconUrl){
+        document.getElementById('gameIconImg').src = data.iconUrl;
+        document.getElementById('gameIconImg').style.objectFit = 'cover';
+      }
+      const statMap = { visits: data.visits, playing: data.playing, likes: data.likes };
+      document.querySelectorAll('.stat-num[data-stat]').forEach(el=>{
+        const key = el.getAttribute('data-stat');
+        if(statMap[key] != null){
+          el.setAttribute('data-count', Math.floor(statMap[key]));
+          el.setAttribute('data-suffix', ''); // real numbers, drop the "+" placeholder suffix
+        }
+      });
+    }catch(err){
+      console.warn('Live stats unavailable, showing fallback numbers:', err.message);
+    }
+  }
+  loadLiveStats();
+
+  // ---------- Loading sequence ----------
+  const loader = document.getElementById('loader');
+  const bar = document.getElementById('loaderBar');
+  const percentEl = document.getElementById('loaderPercent');
+
+  const word = "ZERAMON";
+  const wordEl = document.getElementById('loaderWord');
+  word.split('').forEach((ch,i)=>{
+    const s = document.createElement('span');
+    s.textContent = ch;
+    s.style.opacity = '0';
+    s.style.transition = 'opacity .3s ease';
+    s.style.transitionDelay = (i*0.05)+'s';
+    wordEl.appendChild(s);
+  });
+  requestAnimationFrame(()=> {
+    wordEl.querySelectorAll('span').forEach(s=> s.style.opacity = '1');
+  });
+
+  let progress = 0;
+  const loadTimer = setInterval(()=>{
+    progress += Math.random()*14 + 6;
+    if(progress >= 100){
+      progress = 100;
+      clearInterval(loadTimer);
+      setTimeout(finishLoading, 350);
+    }
+    percentEl.textContent = Math.floor(progress);
+    bar.style.width = progress + '%';
+  }, 220);
+
+  function finishLoading(){
+    loader.classList.add('hide');
+    document.body.classList.add('loaded');
+    setTimeout(()=> startCounters(), 300);
+  }
+
+  // ---------- Nav scroll state ----------
+  const nav = document.getElementById('siteNav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ---------- Mobile menu ----------
+  const navToggle = document.getElementById('navToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  function closeMenu(){
+    navToggle.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  navToggle.addEventListener('click', ()=>{
+    const isOpen = mobileMenu.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('[data-menu-link]').forEach(link=>{
+    link.addEventListener('click', closeMenu);
+  });
+
+  // ---------- Reveal on scroll ----------
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in-view');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el=> revealObserver.observe(el));
+
+  // ---------- Animated stat counters ----------
+  let countersStarted = false;
+  function startCounters(){
+    const statObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting && !countersStarted){
+          countersStarted = true;
+          document.querySelectorAll('.stat-num').forEach(el=>{
+            const target = parseInt(el.getAttribute('data-count'),10);
+            const suffix = el.getAttribute('data-suffix') || '';
+            const duration = 1800;
+            const start = performance.now();
+            function tick(now){
+              const t = Math.min(1,(now-start)/duration);
+              const eased = 1 - Math.pow(1-t,3);
+              const val = Math.floor(eased * target);
+              el.textContent = val.toLocaleString('en-US') + suffix;
+              if(t < 1) requestAnimationFrame(tick);
+              else el.textContent = target.toLocaleString('en-US') + suffix;
+            }
+            requestAnimationFrame(tick);
+          });
+          statObserver.disconnect();
+        }
+      });
+    }, {threshold:0.4});
+    const panel = document.querySelector('.game-panel');
+    if(panel) statObserver.observe(panel);
+  }
+
+  // ---------- 3D tilt interaction ----------
+  const tiltEls = document.querySelectorAll('.tilt');
+  tiltEls.forEach(el=>{
+    let bounds;
+    el.style.transformStyle = 'preserve-3d';
+    el.addEventListener('mouseenter', ()=>{
+      bounds = el.getBoundingClientRect();
+      el.style.transition = 'transform .1s ease-out';
+    });
+    el.addEventListener('mousemove', (e)=>{
+      if(!bounds) bounds = el.getBoundingClientRect();
+      const x = (e.clientX - bounds.left)/bounds.width - 0.5;
+      const y = (e.clientY - bounds.top)/bounds.height - 0.5;
+      const rotY = x * 10;
+      const rotX = y * -10;
+      el.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+    });
+    el.addEventListener('mouseleave', ()=>{
+      el.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
+      el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)';
+    });
+  });
+
+  // ---------- Hero hexagon parallax ----------
+  const hexScene = document.querySelector('.hex-scene');
+  const hexStage = document.querySelector('.hex-stage');
+  if(hexStage){
+    hexStage.addEventListener('mousemove', (e)=>{
+      const bounds = hexStage.getBoundingClientRect();
+      const x = (e.clientX - bounds.left)/bounds.width - 0.5;
+      const y = (e.clientY - bounds.top)/bounds.height - 0.5;
+      hexScene.style.transform = `translateY(-4px) rotateX(${10 - y*16}deg) rotateY(${-8 + x*20}deg)`;
+    });
+    hexStage.addEventListener('mouseleave', ()=>{
+      hexScene.style.transform = '';
+    });
+  }
+</script>
 </body>
 </html>
