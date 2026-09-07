@@ -57,7 +57,6 @@
     padding:0 32px;
   }
 
-  /* ===================== LOADER ===================== */
   #loader{
     position:fixed;inset:0;
     background:
@@ -207,7 +206,6 @@
     letter-spacing:0.05em;
   }
 
-  /* ===================== BACKDROP DECORATION ===================== */
   .field-orbs{
     position:fixed;inset:0;
     pointer-events:none;
@@ -221,7 +219,6 @@
     opacity:.5;
   }
 
-  /* ===================== NAV ===================== */
   header.site-nav{
     position:fixed;top:0;left:0;right:0;
     z-index:60;
@@ -345,7 +342,6 @@
   body.loaded .nav-toggle{animation-delay:.16s;}
   @keyframes navIn{to{opacity:1;transform:translateY(0);}}
 
-  /* ===================== HERO ===================== */
   #hero{
     position:relative;
     min-height:100vh;
@@ -358,7 +354,6 @@
   .hero-bg-image{
     position:absolute;inset:0;
     z-index:0;
-    /* PLACEHOLDER: mets ton image de fond ici (ex: assets/images/background1.jpg) */
     background-image:url('assets/images/background1.png');
     background-size:cover;
     background-position:center;
@@ -476,7 +471,6 @@
   body.loaded .hero-ctas{animation-delay:.32s;}
   @keyframes heroIn{to{opacity:1;transform:translateY(0);}}
 
-  /* --- 3D hexagon logo scene --- */
   .hex-stage{
     position:relative;
     height:460px;
@@ -556,7 +550,6 @@
   @keyframes cueFade{to{opacity:.7;}}
   @keyframes cueMove{0%,100%{transform:translateX(-50%) scaleY(1);opacity:.6;}50%{transform:translateX(-50%) scaleY(.6);opacity:1;}}
 
-  /* ===================== SECTION HEADERS ===================== */
   .section{
     position:relative;
     padding:120px 0;
@@ -584,7 +577,6 @@
   }
   .reveal.in-view{opacity:1;transform:translateY(0) scale(1);}
 
-  /* ===================== GAME PANEL ===================== */
   #game{
     background:var(--white);
   }
@@ -675,7 +667,6 @@
     font-weight:500;
   }
 
-  /* ===================== LINKS / SOCIAL ===================== */
   #links{background:var(--ice-100);}
   .social-grid{
     display:grid;
@@ -733,7 +724,6 @@
   .social-handle svg{width:13px;height:13px;transition:transform .3s var(--ease-out);}
   .social-card:hover .social-handle svg{transform:translateX(4px);}
 
-  /* ===================== TEAM ===================== */
   #team{background:#fff;}
   .team-block{margin-bottom:64px;}
   .team-block:last-child{margin-bottom:0;}
@@ -837,7 +827,6 @@
     letter-spacing:.08em;
   }
 
-  /* ===================== JOIN / RECRUIT ===================== */
   #join{
     background:
       radial-gradient(70% 90% at 85% 10%, rgba(94,230,255,.16), transparent 55%),
@@ -886,7 +875,6 @@
     color:var(--slate-500);
   }
 
-  /* ===================== FOOTER ===================== */
   footer{
     background:var(--navy-950);
     color:var(--slate-500);
@@ -914,7 +902,6 @@
   }
   .footer-bottom .disclaimer{max-width:520px;color:rgba(124,137,168,.7);}
 
-  /* ===================== RESPONSIVE ===================== */
   @media (max-width:980px){
     .hero-inner{grid-template-columns:1fr;}
     .hex-stage{height:340px;order:-1;}
@@ -945,7 +932,6 @@
 </head>
 <body>
 
-  <!-- ===================== LOADER ===================== -->
   <div id="loader">
     <div class="loader-scene">
       <div class="loader-aura"></div>
@@ -970,14 +956,12 @@
     <div class="loader-percent"><span id="loaderPercent">0</span>%</div>
   </div>
 
-  <!-- background ambient orbs -->
   <div class="field-orbs">
     <span style="width:420px;height:420px;top:-120px;left:-140px;background:radial-gradient(circle,rgba(59,107,255,.18),transparent 70%);"></span>
     <span style="width:360px;height:360px;top:40%;right:-160px;background:radial-gradient(circle,rgba(94,230,255,.14),transparent 70%);"></span>
     <span style="width:300px;height:300px;bottom:-100px;left:20%;background:radial-gradient(circle,rgba(37,84,224,.12),transparent 70%);"></span>
   </div>
 
-  <!-- ===================== NAV ===================== -->
   <header class="site-nav" id="siteNav">
     <div class="wrap nav-inner">
       <div class="brand">
@@ -1008,7 +992,6 @@
   </div>
 
   <main>
-    <!-- ===================== HERO ===================== -->
     <section id="hero">
       <div class="hero-bg-image"></div>
       <div class="hero-bg-filter"></div>
@@ -1040,7 +1023,6 @@
       <div class="scroll-cue"></div>
     </section>
 
-    <!-- ===================== GAME / STATS ===================== -->
     <section id="game" class="section">
       <div class="wrap">
         <div class="section-head reveal">
@@ -1075,7 +1057,6 @@
       </div>
     </section>
 
-    <!-- ===================== LINKS ===================== -->
     <section id="links" class="section">
       <div class="wrap">
         <div class="section-head reveal">
@@ -1141,7 +1122,6 @@
       </div>
     </section>
 
-    <!-- ===================== TEAM ===================== -->
     <section id="team" class="section">
       <div class="wrap">
         <div class="section-head reveal">
@@ -1149,7 +1129,6 @@
           <p>The people building, running and growing Zeramon Adventures every day.</p>
         </div>
 
-        <!-- Owner -->
         <div class="team-block reveal">
           <div class="owner-card tilt">
             <div class="avatar-ph">
@@ -1163,7 +1142,6 @@
           </div>
         </div>
 
-        <!-- Developers -->
         <div class="team-block reveal">
           <div class="team-block-label">Developers</div>
           <div class="team-grid">
@@ -1195,7 +1173,6 @@
           </div>
         </div>
 
-        <!-- Staff -->
         <div class="team-block reveal">
           <div class="team-block-label">Staff</div>
           <div class="team-grid staff-grid">
@@ -1225,7 +1202,6 @@
     </section>
   </main>
 
-  <!-- ===================== JOIN / RECRUIT ===================== -->
   <section id="join" class="section">
     <div class="wrap">
       <div class="join-panel reveal">
@@ -1251,7 +1227,6 @@
     </div>
   </section>
 
-  <!-- ===================== FOOTER ===================== -->
   <footer>
     <div class="wrap">
       <div class="footer-top">
@@ -1277,14 +1252,11 @@
   </footer>
 
 <script>
-  // =====================================================================
-  // LIVE ROBLOX STATS — configure these two lines once your worker is live
-  // =====================================================================
-  const ZERAMON_PLACE_ID = "0000000000"; // <-- your Roblox place ID (from the game URL)
-  const STATS_WORKER_URL = "https://zeramon-stats.YOUR-SUBDOMAIN.workers.dev"; // <-- your deployed worker URL
+  const ZERAMON_PLACE_ID = "0000000000";
+  const STATS_WORKER_URL = "https://zeramon-stats.YOUR-SUBDOMAIN.workers.dev";
 
   async function loadLiveStats(){
-    if(!ZERAMON_PLACE_ID || ZERAMON_PLACE_ID === "0000000000") return; // not configured yet, keep placeholder numbers
+    if(!ZERAMON_PLACE_ID || ZERAMON_PLACE_ID === "0000000000") return;
     try{
       const res = await fetch(`${STATS_WORKER_URL}/?placeId=${ZERAMON_PLACE_ID}`);
       if(!res.ok) throw new Error("worker responded with " + res.status);
@@ -1303,7 +1275,7 @@
         const key = el.getAttribute('data-stat');
         if(statMap[key] != null){
           el.setAttribute('data-count', Math.floor(statMap[key]));
-          el.setAttribute('data-suffix', ''); // real numbers, drop the "+" placeholder suffix
+          el.setAttribute('data-suffix', '');
         }
       });
     }catch(err){
@@ -1312,7 +1284,6 @@
   }
   loadLiveStats();
 
-  // ---------- Loading sequence ----------
   const loader = document.getElementById('loader');
   const bar = document.getElementById('loaderBar');
   const percentEl = document.getElementById('loaderPercent');
@@ -1349,13 +1320,11 @@
     setTimeout(()=> startCounters(), 300);
   }
 
-  // ---------- Nav scroll state ----------
   const nav = document.getElementById('siteNav');
   window.addEventListener('scroll', ()=>{
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // ---------- Mobile menu ----------
   const navToggle = document.getElementById('navToggle');
   const mobileMenu = document.getElementById('mobileMenu');
   function closeMenu(){
@@ -1372,7 +1341,6 @@
     link.addEventListener('click', closeMenu);
   });
 
-  // ---------- Reveal on scroll ----------
   const revealObserver = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){
@@ -1383,7 +1351,6 @@
   }, {threshold:0.15});
   document.querySelectorAll('.reveal').forEach(el=> revealObserver.observe(el));
 
-  // ---------- Animated stat counters ----------
   let countersStarted = false;
   function startCounters(){
     const statObserver = new IntersectionObserver((entries)=>{
@@ -1413,7 +1380,6 @@
     if(panel) statObserver.observe(panel);
   }
 
-  // ---------- 3D tilt interaction ----------
   const tiltEls = document.querySelectorAll('.tilt');
   tiltEls.forEach(el=>{
     let bounds;
@@ -1436,7 +1402,6 @@
     });
   });
 
-  // ---------- Hero hexagon parallax ----------
   const hexScene = document.querySelector('.hex-scene');
   const hexStage = document.querySelector('.hex-stage');
   if(hexStage){
