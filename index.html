@@ -828,12 +828,31 @@
   }
 
   #join{
-    background:
-      radial-gradient(70% 90% at 85% 10%, rgba(94,230,255,.16), transparent 55%),
-      linear-gradient(180deg, var(--navy-900) 0%, var(--navy-950) 100%);
+    position:relative;
+    overflow:hidden;
+    background:var(--navy-950);
     padding:110px 0;
   }
+  .join-bg-image{
+    position:absolute;inset:0;
+    z-index:0;
+    background-image:url('assets/images/background2.png');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+  }
+  .join-bg-filter{
+    position:absolute;inset:0;
+    z-index:1;
+    background:
+      radial-gradient(70% 90% at 85% 10%, rgba(94,230,255,.18), transparent 55%),
+      radial-gradient(80% 60% at 10% 100%, rgba(59,107,255,.35), transparent 60%),
+      linear-gradient(180deg, rgba(5,9,20,.82) 0%, rgba(10,19,48,.72) 55%, rgba(16,27,68,.85) 100%);
+    pointer-events:none;
+  }
   .join-panel{
+    position:relative;
+    z-index:2;
     max-width:680px;
     margin:0 auto;
     text-align:center;
@@ -1203,6 +1222,8 @@
   </main>
 
   <section id="join" class="section">
+    <div class="join-bg-image"></div>
+    <div class="join-bg-filter"></div>
     <div class="wrap">
       <div class="join-panel reveal">
         <span class="eyebrow-pill"><span class="dot"></span>You can contribute </span>
