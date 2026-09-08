@@ -61,6 +61,8 @@
     position:fixed;inset:0;
     z-index:999;
     overflow:hidden;
+    background:
+      radial-gradient(120% 140% at 50% 20%, var(--navy-800) 0%, var(--navy-950) 65%);
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -107,7 +109,7 @@
 
   .loader-logo-wrap{
     position:relative;
-    width:180px;height:180px;
+    width:260px;height:260px;
     display:flex;align-items:center;justify-content:center;
     animation:loaderFloat 4.5s ease-in-out infinite;
   }
@@ -117,10 +119,10 @@
   }
   .loader-logo-aura{
     position:absolute;
-    width:260px;height:260px;
+    width:360px;height:360px;
     border-radius:50%;
     background:conic-gradient(from 0deg, rgba(94,230,255,.55), rgba(59,107,255,0) 30%, rgba(94,230,255,0) 70%, rgba(94,230,255,.55));
-    filter:blur(22px);
+    filter:blur(28px);
     opacity:.55;
     animation:spin 6s linear infinite;
   }
@@ -128,10 +130,10 @@
   .loader-logo{
     position:relative;
     z-index:1;
-    width:140px;
-    height:140px;
+    width:220px;
+    height:220px;
     object-fit:contain;
-    filter:drop-shadow(0 0 20px rgba(59,107,255,.55));
+    filter:drop-shadow(0 0 24px rgba(59,107,255,.55));
     opacity:0;
     animation:fillIn .7s var(--ease-out) forwards .3s;
   }
