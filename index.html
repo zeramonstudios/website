@@ -623,7 +623,32 @@
     font-weight:500;
   }
 
-  #links{background:var(--ice-100);}
+  #links{
+    position:relative;
+    overflow:hidden;
+    background:var(--ice-100);
+  }
+  .links-bg-image{
+    position:absolute;inset:0;
+    z-index:0;
+    background-image:url('assets/images/background4.png');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+  }
+  .links-bg-filter{
+    position:absolute;inset:0;
+    z-index:1;
+    background:
+      radial-gradient(70% 90% at 85% 0%, rgba(220,231,252,.6), transparent 55%),
+      radial-gradient(80% 60% at 10% 100%, rgba(238,243,255,.65), transparent 60%),
+      linear-gradient(180deg, rgba(238,243,255,.94) 0%, rgba(220,231,252,.88) 55%, rgba(238,243,255,.96) 100%);
+    pointer-events:none;
+  }
+  #links .wrap{
+    position:relative;
+    z-index:2;
+  }
   .social-grid{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -1022,6 +1047,8 @@
     </section>
 
     <section id="links" class="section">
+      <div class="links-bg-image"></div>
+      <div class="links-bg-filter"></div>
       <div class="wrap">
         <div class="section-head reveal">
           <h2>Follow Zeramon</h2>
