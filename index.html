@@ -57,7 +57,9 @@
 
   #spacer{position:relative;width:1px;pointer-events:none;}
 
+  /* Les images de fond sont maintenant texturées dans le canvas #env (tunnel) */
   .bgs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .bgs .bg{display:none;}
   .bg{position:absolute;inset:-4%;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;will-change:opacity;}
   .bg.b1{background-image:url('assets/images/background1.png');opacity:1;}
   .bg.b4{background-image:url('assets/images/background4.png');}
@@ -1136,13 +1138,101 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
+  /* ===== Tunnel texturé : les images de fond sont plaquées sur le sol, le plafond et les murs ===== */
+  const TUNNEL_IMGS = ['background1','background4','background2'].map(n=>{
+    const im = new Image();
+    im.src = 'assets/images/' + n + '.png';
+    return im;
+  });
+  const envMix = [1, 0, 0];
+  const TUN = { N:15, M:56, TILE:3, SMAX:1.3 };
+
+  function drawTunnel(shift, vx, vy, lnMin, lnMax){
+    const W = envW, H = envH;
+    const range = lnMax - lnMin;
+    const uMax = (Math.log(TUN.SMAX) - lnMin) / range;
+    const du = uMax / TUN.M;
+    const dV = TUN.N * du / TUN.TILE;
+    const hw = TUN.SMAX * W / 2, hh = TUN.SMAX * H / 2;
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#040816';
+    ctx.fillRect(0, 0, W, H);
+
+    for(let k = 0; k < 3; k++){
+      const a = envMix[k];
+      const img = TUNNEL_IMGS[k];
+      if(a < 0.01 || !img.complete || !img.naturalWidth) continue;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      ctx.globalAlpha = a;
+
+      for(let wall = 0; wall < 4; wall++){
+        const rows = wall < 2;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(vx, vy);
+        if(wall === 0){ ctx.lineTo(vx - hw, vy - hh); ctx.lineTo(vx + hw, vy - hh); }
+        if(wall === 1){ ctx.lineTo(vx - hw, vy + hh); ctx.lineTo(vx + hw, vy + hh); }
+        if(wall === 2){ ctx.lineTo(vx - hw, vy - hh); ctx.lineTo(vx - hw, vy + hh); }
+        if(wall === 3){ ctx.lineTo(vx + hw, vy - hh); ctx.lineTo(vx + hw, vy + hh); }
+        ctx.closePath();
+        ctx.clip();
+        if(wall === 1){ ctx.translate(0, 2 * vy); ctx.scale(1, -1); }
+        if(wall === 3){ ctx.translate(2 * vx, 0); ctx.scale(-1, 1); }
+
+        const seg = (s0, s1, v0, v1)=>{
+          if(v1 - v0 <= 0) return;
+          if(rows){
+            ctx.drawImage(img, 0, v0 * ih, iw, (v1 - v0) * ih,
+              vx - s1 * W / 2, vy - s1 * H / 2 - 1, s1 * W, (s1 - s0) * H / 2 + 2);
+          }else{
+            ctx.drawImage(img, v0 * iw, 0, (v1 - v0) * iw, ih,
+              vx - s1 * W / 2 - 1, vy - s1 * H / 2, (s1 - s0) * W / 2 + 2, s1 * H);
+          }
+        };
+
+        for(let j = 0; j < TUN.M; j++){
+          const uA = j * du, uB = uA + du;
+          const sA = Math.exp(lnMin + uA * range);
+          const sB = Math.exp(lnMin + uB * range);
+          let q = (-(TUN.N * (uA - shift)) / TUN.TILE) % 1;
+          if(q < 0) q += 1;
+          if(q - dV >= 0){
+            seg(sA, sB, q - dV, q);
+          }else{
+            const f = q / dV;
+            const sM = sA + (sB - sA) * f;
+            seg(sA, sM, 0, q);
+            seg(sM, sB, 1 - (dV - q), 1);
+          }
+        }
+        ctx.restore();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = 'rgba(4,8,22,.5)';
+    ctx.fillRect(0, 0, W, H);
+    let g = ctx.createRadialGradient(W * .15, 0, 0, W * .15, 0, W * .9);
+    g.addColorStop(0, 'rgba(59,107,255,.3)');
+    g.addColorStop(1, 'rgba(59,107,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    g = ctx.createRadialGradient(vx, vy, 0, vx, vy, Math.max(W, H) * .5);
+    g.addColorStop(0, 'rgba(4,8,22,.95)');
+    g.addColorStop(.35, 'rgba(8,17,43,.55)');
+    g.addColorStop(1, 'rgba(4,8,22,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  }
+
   function drawEnv(shift, mx, my, energy){
-    ctx.clearRect(0, 0, envW, envH);
     const vx = envW / 2 + mx * 70;
     const vy = envH * 0.48 + my * 50;
     const N = 15;
     const lnMin = Math.log(0.05);
     const lnMax = Math.log(2.8);
+    drawTunnel(shift, vx, vy, lnMin, lnMax);
     ctx.lineWidth = 1;
     for(let k = 0; k < N; k++){
       let u = (k / N + shift) % 1;
@@ -1439,6 +1529,9 @@
     bg1.style.opacity = clamp(wHero + wGame * 0.55).toFixed(3);
     bg4.style.opacity = clamp(wL + wT).toFixed(3);
     bg2.style.opacity = clamp(wJoin + wFoot).toFixed(3);
+    envMix[0] = clamp(wHero + wGame * 0.55);
+    envMix[1] = clamp(wL + wT);
+    envMix[2] = clamp(wJoin + wFoot);
 
     progressBar.style.transform = 'scaleX(' + clamp(s / total).toFixed(4) + ')';
     siteNav.classList.toggle('scrolled', s > 40);
