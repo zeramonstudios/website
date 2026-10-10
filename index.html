@@ -1229,49 +1229,9 @@
   function drawEnv(shift, mx, my, energy){
     const vx = envW / 2 + mx * 70;
     const vy = envH * 0.48 + my * 50;
-    const N = 15;
     const lnMin = Math.log(0.05);
     const lnMax = Math.log(2.8);
     drawTunnel(shift, vx, vy, lnMin, lnMax);
-    ctx.lineWidth = 1;
-    for(let k = 0; k < N; k++){
-      let u = (k / N + shift) % 1;
-      if(u < 0) u += 1;
-      const size = Math.exp(lnMin + u * (lnMax - lnMin));
-      const a = Math.pow(Math.sin(Math.PI * u), 1.2) * (0.42 + energy * 0.35);
-      const hw = size * envW * 0.5;
-      const hh = size * envH * 0.5;
-      ctx.strokeStyle = 'rgba(110,170,255,' + a.toFixed(3) + ')';
-      ctx.lineWidth = 0.8 + u * 1.4;
-      ctx.strokeRect(vx - hw, vy - hh, hw * 2, hh * 2);
-    }
-    const ihw = 0.05 * envW * 0.5;
-    const ihh = 0.05 * envH * 0.5;
-    const ohw = 2.8 * envW * 0.5;
-    const ohh = 2.8 * envH * 0.5;
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(94,160,255,0.16)';
-    ctx.beginPath();
-    const M = 9;
-    for(let j = 0; j <= M; j++){
-      const f = -1 + (2 * j) / M;
-      ctx.moveTo(vx + f * ihw, vy - ihh);
-      ctx.lineTo(vx + f * ohw, vy - ohh);
-      ctx.moveTo(vx + f * ihw, vy + ihh);
-      ctx.lineTo(vx + f * ohw, vy + ohh);
-      ctx.moveTo(vx - ihw, vy + f * ihh);
-      ctx.lineTo(vx - ohw, vy + f * ohh);
-      ctx.moveTo(vx + ihw, vy + f * ihh);
-      ctx.lineTo(vx + ohw, vy + f * ohh);
-    }
-    ctx.stroke();
-    ctx.strokeStyle = 'rgba(94,230,255,0.28)';
-    ctx.beginPath();
-    ctx.moveTo(vx - ihw, vy - ihh); ctx.lineTo(vx - ohw, vy - ohh);
-    ctx.moveTo(vx + ihw, vy - ihh); ctx.lineTo(vx + ohw, vy - ohh);
-    ctx.moveTo(vx - ihw, vy + ihh); ctx.lineTo(vx - ohw, vy + ohh);
-    ctx.moveTo(vx + ihw, vy + ihh); ctx.lineTo(vx + ohw, vy + ohh);
-    ctx.stroke();
     const maxD = Math.max(envW, envH) * 0.75;
     for(let i = 0; i < particles.length; i++){
       const p = particles[i];
