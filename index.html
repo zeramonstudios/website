@@ -3,1692 +3,649 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#040816">
 <title>Zeramon Studio</title>
 <link rel="icon" type="image/png" href="assets/images/zeramon-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --navy-950:#040816;
-    --navy-900:#08112B;
-    --navy-800:#0E1B45;
-    --blue-700:#1739B0;
-    --blue-600:#2554E0;
-    --blue-500:#3B6BFF;
-    --blue-400:#6E93FF;
-    --cyan-400:#5EE6FF;
-    --ice-200:#DCE7FC;
-    --ice-300:#B9C9EE;
-    --slate-400:#8E9CC0;
-    --r-xl:32px;
-    --r-lg:26px;
-    --r-md:20px;
-    --ease:cubic-bezier(.16,1,.3,1);
-    --ease-io:cubic-bezier(.77,0,.18,1);
-    --pad:32px;
-    --pw:520px;
-    --ph:333px;
-    --sw:43px;
-    --px:0px;
-    --py:0px;
-  }
+:root{
+  --ink:#040916;--deep:#09122E;--royal:#2B5BFF;--sky:#7BA0FF;--cyan:#62E6FF;--mist:#CBD9F8;--mute:#8090B4;
+  --out:cubic-bezier(.16,1,.3,1);--r:28px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',sans-serif;background:var(--ink);color:#fff;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img,svg{display:block}
+button{font:inherit;border:0;background:none;cursor:pointer;color:inherit}
+::selection{background:var(--royal);color:#fff}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+h1,h2,h3,.display{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.02em}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
 
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{background:var(--navy-950);}
-  body{
-    font-family:'Plus Jakarta Sans',system-ui,sans-serif;
-    background:var(--navy-950);
-    color:#fff;
-    overflow-x:hidden;
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-  }
-  body.locked{overflow:hidden;}
-  a{color:inherit;text-decoration:none;}
-  ul{list-style:none;}
-  img,svg{display:block;}
-  button{font-family:inherit;border:none;cursor:pointer;background:none;color:inherit;}
-  ::selection{background:var(--blue-500);color:#fff;}
-  :focus-visible{outline:2px solid var(--cyan-400);outline-offset:3px;border-radius:8px;}
-  h1,h2,h3,.display{font-family:'Sora',sans-serif;letter-spacing:-0.025em;}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad);width:100%;}
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 90% at 50% -10%,#10205a,var(--ink) 65%)}
+.bg i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;will-change:transform}
+.bg i:nth-child(1){width:560px;height:560px;left:-120px;top:10%;background:#2B5BFF;animation:d1 22s ease-in-out infinite alternate}
+.bg i:nth-child(2){width:480px;height:480px;right:-100px;top:40%;background:#1fa8e6;opacity:.35;animation:d2 26s ease-in-out infinite alternate}
+.bg i:nth-child(3){width:520px;height:520px;left:30%;bottom:-160px;background:#5a3dff;opacity:.3;animation:d3 30s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(260px,180px) scale(1.15)}}
+@keyframes d2{to{transform:translate(-300px,-160px) scale(1.2)}}
+@keyframes d3{to{transform:translate(-220px,-120px) scale(.9)}}
 
-  #spacer{position:relative;width:1px;pointer-events:none;}
+.glass{position:relative;border-radius:var(--r);transform-style:preserve-3d;transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));will-change:transform}
+.glass::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(145deg,rgba(255,255,255,.17),rgba(255,255,255,.04) 55%,rgba(98,230,255,.07));border:1px solid rgba(255,255,255,.2);border-top-color:rgba(255,255,255,.42);border-left-color:rgba(255,255,255,.3);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:0 40px 70px -28px rgba(2,6,35,.85),0 12px 28px -14px rgba(43,91,255,.35),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -24px 44px rgba(43,91,255,.1);transition:border-color .5s,box-shadow .5s}
+.glass::after{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(300px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.2),transparent 62%);opacity:0;transition:opacity .5s;pointer-events:none;transform:translateZ(2px)}
+.glass:hover::after{opacity:1}
+.glass:hover::before{border-color:rgba(160,200,255,.55);box-shadow:0 50px 90px -30px rgba(2,6,35,.9),0 18px 40px -14px rgba(43,91,255,.6),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -24px 44px rgba(43,91,255,.16)}
+.z1{transform:translateZ(24px)}
+.z2{transform:translateZ(46px)}
+.z3{transform:translateZ(70px)}
 
-  /* Les images de fond sont maintenant texturées dans le canvas #env (tunnel) */
-  .bgs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-  .bgs .bg{display:none;}
-  .bg{position:absolute;inset:-4%;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;will-change:opacity;}
-  .bg.b1{background-image:url('assets/images/background1.png');opacity:1;}
-  .bg.b4{background-image:url('assets/images/background4.png');}
-  .bg.b2{background-image:url('assets/images/background2.png');}
-  .bg-tint{
-    position:absolute;inset:0;
-    background:
-      radial-gradient(90% 70% at 15% 0%, rgba(59,107,255,.42), transparent 60%),
-      radial-gradient(70% 60% at 100% 10%, rgba(94,230,255,.2), transparent 55%),
-      linear-gradient(180deg, rgba(4,8,22,.86) 0%, rgba(8,17,43,.8) 55%, rgba(4,8,22,.92) 100%);
-  }
-  #env{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
-  .vignette{
-    position:fixed;inset:0;z-index:3;pointer-events:none;
-    background:
-      radial-gradient(80% 70% at 50% 50%, transparent 40%, rgba(2,5,16,.78) 100%),
-      linear-gradient(180deg, rgba(2,5,16,.5), transparent 18%, transparent 80%, rgba(2,5,16,.6));
-  }
-  .shards{position:fixed;inset:0;z-index:2;perspective:1200px;transform-style:preserve-3d;pointer-events:none;overflow:hidden;}
-  .shard{
-    position:absolute;left:50%;top:50%;
-    width:var(--sz);height:calc(var(--sz) * 1.15);
-    margin:calc(var(--sz) * -.575) 0 0 calc(var(--sz) * -.5);
-    background:linear-gradient(135deg, rgba(255,255,255,.4), rgba(94,230,255,.1) 40%, rgba(59,107,255,.3));
-    will-change:transform,opacity;
-    opacity:0;
-  }
-  .shard.s0{clip-path:polygon(50% 0%,100% 100%,0% 100%);}
-  .shard.s1{clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);}
-  .shard.s2{clip-path:polygon(25% 0%,100% 20%,75% 100%,0% 80%);}
+#loader{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(100% 100% at 50% 40%,#0d1d52,var(--ink));transition:opacity .9s var(--out),visibility .9s,transform 1.1s var(--out);transform-origin:50% 50%}
+#loader.done{opacity:0;visibility:hidden;transform:scale(1.08);pointer-events:none}
+.l-core{display:flex;flex-direction:column;align-items:center;gap:30px}
+.l-core img{width:170px;height:170px;object-fit:contain;filter:drop-shadow(0 0 34px rgba(43,91,255,.85));animation:float 3.6s ease-in-out infinite}
+.l-bar{width:220px;height:4px;border-radius:10px;background:rgba(255,255,255,.12);overflow:hidden}
+.l-bar b{display:block;height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--royal),var(--cyan));box-shadow:0 0 14px var(--cyan);transition:width .3s var(--out)}
+.l-pct{font-family:'Bricolage Grotesque';font-size:14px;font-weight:700;color:var(--mist);font-variant-numeric:tabular-nums}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
-  .progress{
-    position:fixed;top:0;left:0;right:0;height:3px;z-index:120;
-    transform-origin:0 50%;transform:scaleX(0);
-    background:linear-gradient(90deg, var(--blue-500), var(--cyan-400));
-    box-shadow:0 0 14px rgba(94,230,255,.7);
-  }
-  .cursor-glow{
-    position:fixed;top:0;left:0;width:520px;height:520px;margin:-260px 0 0 -260px;
-    border-radius:50%;
-    background:radial-gradient(closest-side, rgba(94,230,255,.12), rgba(59,107,255,.06) 45%, transparent 70%);
-    pointer-events:none;z-index:4;opacity:0;transition:opacity .6s ease;will-change:transform;
-  }
-  .cursor-glow.on{opacity:1;}
+#glow{position:fixed;left:0;top:0;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(98,160,255,.16),transparent 65%);will-change:transform}
 
-  #loader{
-    position:fixed;inset:0;z-index:999;overflow:hidden;
-    background:radial-gradient(120% 140% at 50% 20%, var(--navy-800) 0%, var(--navy-950) 65%);
-    display:flex;align-items:center;justify-content:center;
-    clip-path:inset(0 0 0 0);
-    transition:clip-path 1.1s var(--ease-io), visibility 0s linear 1.1s;
-  }
-  #loader.hide{clip-path:inset(0 0 100% 0);visibility:hidden;pointer-events:none;}
-  .loader-bg-image{position:absolute;inset:0;z-index:0;background:url('assets/images/background0.png') center/cover no-repeat;}
-  .loader-bg-filter{
-    position:absolute;inset:0;z-index:1;
-    background:
-      radial-gradient(60% 50% at 50% 40%, rgba(59,107,255,.28), transparent 70%),
-      radial-gradient(120% 140% at 50% 20%, rgba(10,19,48,.62) 0%, rgba(5,9,20,.86) 65%);
-  }
-  #loader::before{
-    content:'';position:absolute;inset:0;z-index:2;
-    background-image:
-      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-    background-size:44px 44px;
-    -webkit-mask-image:radial-gradient(60% 55% at 50% 42%, #000, transparent 80%);
-    mask-image:radial-gradient(60% 55% at 50% 42%, #000, transparent 80%);
-  }
-  .loader-content{
-    position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;
-    transition:transform .7s var(--ease), opacity .5s ease;
-  }
-  #loader.hide .loader-content{transform:translateY(-40px) scale(.94);opacity:0;}
-  .loader-logo-wrap{
-    position:relative;width:340px;height:340px;
-    display:flex;align-items:center;justify-content:center;
-    animation:floatY 4.5s ease-in-out infinite;
-  }
-  .loader-ring{
-    position:absolute;width:330px;height:330px;border-radius:50%;
-    background:conic-gradient(from 0deg, rgba(94,230,255,.9), rgba(59,107,255,0) 32%, rgba(94,230,255,0) 68%, rgba(94,230,255,.9));
-    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-    mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-    animation:spin 3.2s linear infinite;
-  }
-  .loader-aura{
-    position:absolute;width:460px;height:460px;border-radius:50%;
-    background:conic-gradient(from 0deg, rgba(94,230,255,.5), rgba(59,107,255,0) 30%, rgba(94,230,255,0) 70%, rgba(94,230,255,.5));
-    filter:blur(36px);opacity:.5;animation:spin 7s linear infinite reverse;
-  }
-  .loader-logo{
-    position:relative;z-index:1;width:290px;height:290px;object-fit:contain;
-    filter:drop-shadow(0 0 30px rgba(59,107,255,.6));
-    opacity:0;transform:scale(.88);animation:logoIn 1s var(--ease) forwards .25s;
-  }
-  @keyframes logoIn{to{opacity:1;transform:scale(1);}}
-  .loader-progress{
-    margin-top:28px;width:190px;height:6px;border-radius:100px;
-    background:rgba(255,255,255,.1);box-shadow:inset 0 1px 2px rgba(0,0,0,.4);overflow:hidden;
-  }
-  .loader-progress-bar{
-    height:100%;width:0%;border-radius:100px;
-    background:linear-gradient(90deg, var(--blue-500), var(--cyan-400));
-    box-shadow:0 0 12px rgba(94,230,255,.7);transition:width .22s linear;
-  }
-  .loader-percent{
-    margin-top:12px;font-family:'Sora',sans-serif;font-size:13px;font-weight:500;
-    color:var(--ice-300);font-variant-numeric:tabular-nums;letter-spacing:.04em;
-  }
+.bar{position:fixed;top:16px;left:0;right:0;z-index:80;display:flex;justify-content:center;padding:0 20px;transition:transform .7s var(--out)}
+.bar.hide{transform:translateY(-130%)}
+.bar-in{position:relative;width:100%;max-width:1160px;height:68px;border-radius:22px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 14px 0 22px;background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.16);border-top-color:rgba(255,255,255,.32);backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);box-shadow:0 20px 50px -20px rgba(2,6,35,.8),inset 0 1px 0 rgba(255,255,255,.3);overflow:hidden;transition:background .5s,box-shadow .5s}
+.bar.solid .bar-in{background:linear-gradient(145deg,rgba(14,26,70,.78),rgba(8,16,44,.7))}
+.brand{display:flex;align-items:center;gap:12px;font-family:'Bricolage Grotesque';font-weight:800;font-size:19px;justify-self:start}
+.brand img{width:34px;height:34px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(43,91,255,.7))}
+.menu{position:relative;display:flex;gap:2px}
+.menu a{position:relative;z-index:1;padding:11px 20px;font-size:14px;font-weight:600;color:var(--mist);border-radius:14px;transition:color .35s}
+.menu a:hover,.menu a.on{color:#fff}
+.ind{position:absolute;top:0;left:0;height:100%;width:0;border-radius:14px;background:rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.3);transition:transform .6s var(--out),width .6s var(--out),opacity .4s;opacity:0}
+.bar-r{display:flex;align-items:center;gap:10px;justify-self:end}
+.ibtn{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);transition:background .3s,transform .4s var(--out)}
+.ibtn:hover{background:rgba(255,255,255,.18);transform:translateY(-2px)}
+.ibtn svg{width:20px;height:20px}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:15px 28px;border-radius:16px;font-weight:700;font-size:15px;overflow:hidden;transition:box-shadow .5s var(--out),background .4s;will-change:transform}
+.btn-p{background:linear-gradient(120deg,var(--royal),#1a3fc4);box-shadow:0 12px 32px -6px rgba(43,91,255,.6),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn-p::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--out)}
+.btn-p:hover{box-shadow:0 18px 46px -6px rgba(43,91,255,.85),0 0 36px rgba(98,230,255,.3)}
+.btn-p:hover::after{transform:translateX(120%)}
+.btn-g{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(12px)}
+.btn-g:hover{background:rgba(255,255,255,.17)}
+.btn-s{padding:12px 22px;font-size:14px;border-radius:14px}
+.burger{display:none;flex-direction:column;justify-content:center;gap:6px;width:44px;height:44px;padding:0 11px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+.burger span{height:2px;background:#fff;border-radius:2px;transition:transform .4s var(--out),opacity .3s}
+.burger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.pbar{position:absolute;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,var(--royal),var(--cyan));box-shadow:0 0 10px var(--cyan)}
+.mmenu{position:fixed;inset:0;z-index:70;background:rgba(4,9,22,.94);backdrop-filter:blur(24px);display:flex;flex-direction:column;justify-content:center;padding:0 32px;gap:4px;clip-path:circle(0 at 88% 6%);transition:clip-path .8s var(--out)}
+.mmenu.open{clip-path:circle(150% at 88% 6%)}
+.mmenu a{font-family:'Bricolage Grotesque';font-size:46px;font-weight:800;padding:8px 0}
 
-  @keyframes spin{to{transform:rotate(360deg);}}
-  @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-  @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+#hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:150px 0 130px}
+.h-bg{position:absolute;inset:-6%;background:url('assets/images/background1.png') center/cover;will-change:transform}
+.h-shade{position:absolute;inset:0;background:radial-gradient(80% 60% at 15% 0,rgba(43,91,255,.45),transparent 60%),linear-gradient(180deg,rgba(4,9,22,.75),rgba(4,9,22,.55) 50%,var(--ink) 100%)}
+#fx{position:absolute;inset:0;width:100%;height:100%}
+.h-in{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:10px;padding:9px 18px 9px 12px;border-radius:100px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);font-size:13px;font-weight:600;color:var(--mist);backdrop-filter:blur(12px)}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px 3px rgba(98,230,255,.7);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+.h-title{font-size:clamp(56px,8.6vw,124px);line-height:.92;font-weight:800;margin:26px 0}
+.ln{display:block;overflow:hidden;padding:0 0 .1em}
+.ln span{display:block;transform:translateY(112%) rotate(3deg);transform-origin:0 100%;transition:transform 1.3s var(--out)}
+.go .ln span{transform:none}
+.go .ln:nth-child(2) span{transition-delay:.14s}
+.ln.g span{background:linear-gradient(100deg,#fff 5%,var(--cyan) 45%,var(--sky) 65%,#fff 95%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}
+@keyframes shine{to{background-position:-250% 0}}
+.h-copy{max-width:500px;font-size:18px;line-height:1.7;color:var(--mist)}
+.h-cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+.h-copy,.h-cta,.tag{opacity:0;translate:0 24px;transition:opacity 1.2s var(--out) .55s,translate 1.2s var(--out) .55s}
+.go .h-copy,.go .h-cta,.go .tag{opacity:1;translate:0 0}
 
-  .site-nav{
-    position:fixed;top:14px;left:0;right:0;z-index:80;pointer-events:none;
-    translate:0 -140%;transition:translate 1.1s var(--ease) .55s;
-  }
-  body.loaded .site-nav{translate:0 0;}
-  .nav-inner{
-    pointer-events:auto;max-width:1080px;margin:0 auto;padding:10px 12px 10px 22px;
-    display:flex;align-items:center;justify-content:space-between;gap:20px;border-radius:100px;
-    background:linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
-    backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 0 0 1px rgba(255,255,255,.1), 0 18px 40px -16px rgba(2,8,30,.7);
-  }
-  .brand{display:flex;align-items:center;gap:11px;font-family:'Sora',sans-serif;font-weight:700;font-size:17px;letter-spacing:-0.02em;}
-  .brand-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;}
-  .brand-mark img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(37,84,224,.55));}
-  .nav-links{position:relative;display:flex;align-items:center;gap:2px;}
-  .nav-links a{position:relative;z-index:1;padding:10px 18px;font-size:14px;font-weight:500;color:var(--ice-300);transition:color .3s ease;}
-  .nav-links a:hover,.nav-links a.active{color:#fff;}
-  .nav-indicator{
-    position:absolute;left:0;top:0;bottom:0;width:0;border-radius:100px;
-    background:linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.07));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.45), 0 6px 16px -6px rgba(59,107,255,.6);
-    opacity:0;transition:transform .5s var(--ease), width .5s var(--ease), opacity .3s ease;pointer-events:none;
-  }
-  .nav-cta{
-    padding:12px 24px;border-radius:100px;
-    background:linear-gradient(135deg, var(--blue-500), var(--blue-700));
-    font-size:14px;font-weight:600;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 8px 22px -6px rgba(37,84,224,.7);
-    transition:transform .35s var(--ease), box-shadow .35s var(--ease);
-  }
-  .nav-cta:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 14px 30px -6px rgba(59,107,255,.85);}
-  .nav-toggle{
-    display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;
-    width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);
-  }
-  .nav-toggle span{display:block;height:2px;width:18px;background:#fff;border-radius:2px;transition:transform .35s var(--ease), opacity .3s ease;}
-  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-  .nav-toggle.open span:nth-child(2){opacity:0;}
-  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-  .mobile-menu{
-    position:fixed;top:84px;left:16px;right:16px;z-index:75;padding:12px 20px 20px;border-radius:var(--r-lg);
-    background:linear-gradient(135deg, rgba(40,64,140,.55), rgba(8,17,43,.78));
-    backdrop-filter:blur(26px) saturate(180%);-webkit-backdrop-filter:blur(26px) saturate(180%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.4), inset 0 0 0 1px rgba(255,255,255,.1), 0 30px 60px -20px rgba(2,8,30,.8);
-    display:flex;flex-direction:column;opacity:0;visibility:hidden;translate:0 -14px;scale:.97;
-    transition:opacity .4s var(--ease), translate .5s var(--ease), scale .5s var(--ease), visibility 0s linear .5s;
-  }
-  .mobile-menu.open{opacity:1;visibility:visible;translate:0 0;scale:1;transition-delay:0s;}
-  .mobile-menu a{
-    font-size:17px;font-weight:500;color:var(--ice-200);padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.08);
-    opacity:0;translate:0 10px;transition:opacity .5s var(--ease), translate .5s var(--ease);
-  }
-  .mobile-menu.open a{opacity:1;translate:0 0;}
-  .mobile-menu.open a:nth-child(1){transition-delay:.05s;}
-  .mobile-menu.open a:nth-child(2){transition-delay:.1s;}
-  .mobile-menu.open a:nth-child(3){transition-delay:.15s;}
-  .mobile-menu.open a:nth-child(4){transition-delay:.2s;}
-  .mobile-menu.open a:nth-child(5){transition-delay:.25s;}
-  .mobile-menu .btn{margin-top:18px;justify-content:center;border-bottom:none;color:#fff;}
+.stage{position:relative;height:540px;perspective:1200px}
+.sc3{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));will-change:transform}
+.hc{position:absolute;left:50%;top:50%;width:300px;height:340px;margin:-170px 0 0 -150px;display:grid;place-items:center;--r:36px}
+.hc img{width:200px;height:200px;object-fit:contain;filter:drop-shadow(0 30px 34px rgba(8,25,140,.75)) drop-shadow(0 0 40px rgba(43,91,255,.6));animation:float 6s ease-in-out infinite}
+.hc .cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-family:'Bricolage Grotesque';font-weight:700;font-size:18px}
+.chip{position:absolute;padding:16px 18px;--r:20px;font-size:13px;font-weight:600}
+.chip small{display:block;color:var(--mute);font-size:12px;font-weight:600;margin-bottom:8px}
+.c-bt{right:0;top:30px;width:230px}
+.c-sv{left:0;bottom:50px;width:200px;display:flex;align-items:center;gap:12px}
+.c-sv i{width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px 3px rgba(98,230,255,.7);animation:pulse 1.8s infinite}
+.hp{display:flex;align-items:center;gap:10px;margin-top:8px}
+.hp span{width:26px;color:var(--mist);font-size:11px}
+.hp b{flex:1;height:7px;border-radius:8px;background:rgba(255,255,255,.14);overflow:hidden}
+.hp b::after{content:'';display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#3dd68c,#a8f06a);animation:hit1 5s var(--out) infinite}
+.hp.e b::after{background:linear-gradient(90deg,#ff7a59,#ffb85c);animation:hit2 5s var(--out) infinite}
+@keyframes hit1{0%,18%{width:100%}28%,52%{width:78%}62%,100%{width:78%}}
+@keyframes hit2{0%,8%{width:100%}18%,40%{width:62%}50%,72%{width:34%}82%,100%{width:34%}}
+.ticker{position:absolute;left:0;right:0;bottom:0;z-index:4;border-block:1px solid rgba(255,255,255,.1);background:rgba(4,9,22,.6);backdrop-filter:blur(14px);overflow:hidden;padding:18px 0}
+.tk{display:flex;width:max-content;animation:tick 34s linear infinite;font-family:'Bricolage Grotesque';font-size:22px;font-weight:700;color:var(--mist)}
+.tk span{display:flex;align-items:center;gap:48px;padding-right:48px;white-space:nowrap}
+.tk svg{width:16px;height:16px;color:var(--cyan)}
+@keyframes tick{to{transform:translateX(-50%)}}
 
-  .side-index{
-    position:fixed;right:28px;top:50%;translate:0 -50%;z-index:30;
-    display:flex;flex-direction:column;gap:6px;align-items:flex-end;
-    opacity:0;transition:opacity 1s ease .8s;
-  }
-  body.loaded .side-index{opacity:1;}
-  .side-index button{
-    display:flex;align-items:center;gap:12px;padding:7px 0;
-    font-family:'Sora',sans-serif;font-size:12.5px;font-weight:500;color:var(--slate-400);
-    transition:color .35s ease;
-  }
-  .side-index button i{
-    display:block;width:8px;height:8px;border-radius:50%;
-    background:rgba(255,255,255,.28);
-    transition:transform .5s var(--ease), background .35s ease, box-shadow .35s ease;
-  }
-  .side-index button span{opacity:0;translate:8px 0;transition:opacity .35s ease, translate .5s var(--ease);}
-  .side-index button:hover span,.side-index button.active span{opacity:1;translate:0 0;}
-  .side-index button:hover,.side-index button.active{color:#fff;}
-  .side-index button.active i{background:var(--cyan-400);transform:scale(1.5);box-shadow:0 0 12px rgba(94,230,255,.9);}
+.sec{position:relative;padding:130px 0}
+.s-head{max-width:700px;margin-bottom:64px}
+.s-head h2{font-size:clamp(36px,5vw,64px);line-height:1;font-weight:800}
+.s-head p{margin-top:18px;font-size:17px;line-height:1.7;color:var(--mist)}
+.rv{opacity:0;translate:0 44px;transition:opacity 1.1s var(--out),translate 1.1s var(--out)}
+.rv.in{opacity:1;translate:0 0}
 
-  .stage{position:fixed;inset:0;z-index:5;overflow:hidden;pointer-events:none;}
-  .scene{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    padding:96px 0 80px;visibility:hidden;opacity:0;will-change:transform,opacity;pointer-events:none;
-  }
+.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.fc{min-height:360px;padding:30px 26px;display:flex;flex-direction:column;justify-content:flex-end}
+.fc .ic{position:absolute;top:26px;left:26px;width:64px;height:64px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(150deg,var(--sky),#1a3fc4);box-shadow:0 18px 32px -8px rgba(43,91,255,.8),inset 0 1px 1px rgba(255,255,255,.5)}
+.fc .ic svg{width:30px;height:30px}
+.fc h3{font-size:27px;font-weight:700;margin-bottom:10px}
+.fc p{font-size:14.5px;line-height:1.65;color:var(--mist)}
 
-  .scene-title{
-    position:absolute;left:max(var(--pad), calc((100vw - 1180px) / 2 + var(--pad)));top:110px;max-width:560px;z-index:3;pointer-events:none;
-  }
-  .scene-title h2{font-size:clamp(30px,3.8vw,54px);font-weight:700;line-height:1.05;}
-  .scene-title p{margin-top:14px;font-size:16px;line-height:1.65;color:var(--ice-300);max-width:440px;}
+#game{overflow:hidden}
+#game::before{content:'';position:absolute;inset:0;background:url('assets/images/background2.png') center/cover;opacity:.16;mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent)}
+.gp{display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center;padding:52px;--r:36px}
+.gi{display:flex;flex-direction:column;align-items:center;gap:16px}
+.gi .box{width:150px;height:150px;border-radius:36px;display:grid;place-items:center;background:linear-gradient(150deg,var(--sky),#1a3fc4 75%);box-shadow:0 28px 50px -14px rgba(43,91,255,.8),inset 0 2px 2px rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.3);overflow:hidden}
+.gi .box img{width:80%;height:80%;object-fit:contain}
+.gi b{font-family:'Bricolage Grotesque';font-size:20px}
+.gi em{display:flex;align-items:center;gap:8px;font-style:normal;font-size:13px;font-weight:600;color:var(--cyan)}
+.gi em::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px 2px rgba(98,230,255,.8);animation:pulse 1.8s infinite}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.st{padding:30px 24px;--r:22px}
+.st .n{font-family:'Bricolage Grotesque';font-size:clamp(30px,3.6vw,46px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.st .l{margin-top:10px;font-size:14px;color:var(--mist);font-weight:600}
 
-  .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em;margin-bottom:-.14em;}
-  .wi{display:inline-block;transform:translateY(108%) rotate(4deg);transform-origin:0 100%;transition:transform 1.1s var(--ease);}
-  .scene.live [data-words] .wi{transform:none;}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.sc{padding:32px 28px;--r:24px}
+.si{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;margin-bottom:24px;box-shadow:0 16px 28px -8px rgba(0,0,0,.6),inset 0 1px 1px rgba(255,255,255,.4)}
+.si svg{width:24px;height:24px}
+.sc h3{font-size:22px;font-weight:700;margin-bottom:6px}
+.sc p{font-size:14px;color:var(--mist)}
+.sh{margin-top:20px;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:var(--cyan)}
+.sh svg{width:14px;height:14px;transition:transform .5s var(--out)}
+.sc:hover .sh svg{transform:translateX(6px)}
 
-  .reveal{
-    opacity:0;translate:0 44px;scale:.95;
-    transition:opacity .9s var(--ease) var(--d,0ms), translate 1s var(--ease) var(--d,0ms), scale 1s var(--ease) var(--d,0ms);
-  }
-  .scene.live .reveal{opacity:1;translate:0 0;scale:1;}
+.tb{margin-bottom:70px}
+.tb:last-child{margin-bottom:0}
+.tl{font-family:'Bricolage Grotesque';font-size:24px;font-weight:700;margin-bottom:26px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.owner{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;padding:44px;--r:34px}
+.owner .av{width:150px;height:150px;margin:0}
+.owner .nm{font-size:36px}
+.owner .jb{color:var(--cyan);font-size:15px}
+.tg{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+.tg.staff{grid-template-columns:repeat(4,1fr)}
+.mc{padding:30px 20px;text-align:center;--r:24px}
+.av{width:96px;height:96px;margin:0 auto 20px;border-radius:50%;background:linear-gradient(150deg,var(--sky),#1a3fc4);padding:3px;box-shadow:0 18px 30px -10px rgba(43,91,255,.7)}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:var(--deep)}
+.nm{font-family:'Bricolage Grotesque';font-size:18px;font-weight:700}
+.jb{margin-top:6px;font-size:13px;font-weight:600;color:var(--sky)}
 
-  .card{
-    position:relative;border-radius:var(--r-lg);transform-style:preserve-3d;
-    transform:perspective(1100px) translateZ(var(--lift,0px)) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
-    transition:transform .5s var(--ease), opacity .9s var(--ease) var(--d,0ms), translate 1s var(--ease) var(--d,0ms), scale 1s var(--ease) var(--d,0ms);
-    box-shadow:0 40px 70px -34px rgba(1,6,24,.9), 0 12px 24px -16px rgba(1,6,24,.6);
-    will-change:transform;
-  }
-  .card.tilt:hover{--lift:22px;}
-  .card.xl{border-radius:var(--r-xl);}
-  .face{
-    position:absolute;inset:0;border-radius:inherit;overflow:hidden;
-    background:
-      linear-gradient(115deg, rgba(255,255,255,.2) 0%, rgba(255,255,255,.05) 38%, rgba(255,255,255,.02) 56%, rgba(255,255,255,.12) 100%),
-      linear-gradient(180deg, rgba(110,147,255,.14), rgba(8,17,43,.28));
-    backdrop-filter:blur(24px) saturate(185%) brightness(1.08);-webkit-backdrop-filter:blur(24px) saturate(185%) brightness(1.08);
-    box-shadow:
-      inset 0 1.5px 0 rgba(255,255,255,.65), inset 0 -1.5px 0 rgba(255,255,255,.1),
-      inset 1px 0 0 rgba(255,255,255,.16), inset -1px 0 0 rgba(255,255,255,.08),
-      inset 0 0 34px rgba(255,255,255,.06), inset 0 -26px 40px -26px rgba(37,84,224,.35);
-  }
-  .face::before{
-    content:'';position:absolute;inset:0;border-radius:inherit;padding:1.2px;
-    background:linear-gradient(140deg, rgba(255,255,255,.85), rgba(255,255,255,.1) 30%, rgba(94,230,255,.28) 65%, rgba(255,255,255,.5));
-    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite:xor;
-    mask:linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-    pointer-events:none;
-  }
-  .face::after{
-    content:'';position:absolute;inset:0;border-radius:inherit;
-    background:radial-gradient(380px circle at var(--mx,50%) var(--my,0%), rgba(255,255,255,.3), rgba(94,230,255,.08) 40%, transparent 62%);
-    opacity:0;transition:opacity .45s ease;pointer-events:none;
-  }
-  .card:hover .face::after{opacity:1;}
-  .card-body{position:relative;transform:translateZ(42px);}
-  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-    .face{background:linear-gradient(160deg, rgba(40,64,140,.9), rgba(8,17,43,.95));}
-    .nav-inner,.mobile-menu{background:rgba(8,17,43,.92);}
-  }
+#join{position:relative;overflow:hidden;padding:150px 0}
+#join::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(4,9,22,.7)),url('assets/images/background2.png') center/cover;opacity:.5;mask-image:linear-gradient(180deg,transparent,#000 30%)}
+.jp{max-width:780px;margin:0 auto;text-align:center;padding:64px 48px;--r:40px}
+.jp h2{font-size:clamp(34px,5vw,62px);line-height:1;font-weight:800;margin:22px 0}
+.jp p{font-size:17px;line-height:1.7;color:var(--mist);max-width:600px;margin:0 auto}
+.pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:34px 0}
+.pills span{padding:10px 20px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font-size:14px;font-weight:600;color:var(--mist);transition:all .5s var(--out)}
+.pills span:hover{background:var(--royal);border-color:var(--royal);color:#fff;transform:translateY(-5px)}
+.jn{margin-top:20px;font-size:13.5px;color:var(--mute)}
 
-  .btn{
-    position:relative;padding:16px 30px;border-radius:100px;font-size:15px;font-weight:600;
-    display:inline-flex;align-items:center;gap:10px;overflow:hidden;
-    transition:transform .4s var(--ease), box-shadow .4s var(--ease), background-position .7s ease, border-color .3s ease;
-  }
-  .btn-primary{
-    background:linear-gradient(135deg, var(--blue-500), var(--cyan-400) 60%, var(--blue-600));
-    background-size:240% 240%;background-position:0% 50%;
-    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 -3px 8px rgba(0,0,0,.18), 0 14px 34px -8px rgba(37,84,224,.75);
-  }
-  .btn-primary::after{
-    content:'';position:absolute;top:0;bottom:0;left:-60%;width:40%;
-    background:linear-gradient(105deg, transparent, rgba(255,255,255,.55), transparent);
-    transform:skewX(-20deg);transition:left .8s var(--ease);
-  }
-  .btn-primary:hover{transform:translateY(-3px) scale(1.02);background-position:100% 50%;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.65), inset 0 -3px 8px rgba(0,0,0,.18), 0 22px 46px -8px rgba(59,107,255,.9), 0 0 36px rgba(94,230,255,.35);}
-  .btn-primary:hover::after{left:130%;}
-  .btn-glass{
-    background:linear-gradient(135deg, rgba(255,255,255,.2), rgba(255,255,255,.05));
-    backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);
-    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.12), 0 14px 30px -14px rgba(2,8,30,.7);
-  }
-  .btn-glass:hover{transform:translateY(-3px);background:linear-gradient(135deg, rgba(255,255,255,.3), rgba(255,255,255,.1));box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(94,230,255,.4), 0 20px 40px -14px rgba(37,84,224,.6);}
+footer{position:relative;z-index:2;padding:64px 0 34px;border-top:1px solid rgba(255,255,255,.08);background:rgba(4,9,22,.6);backdrop-filter:blur(14px)}
+.ft{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.08)}
+.fl{display:flex;gap:30px;flex-wrap:wrap}
+.fl a{font-size:14px;color:var(--mute);transition:color .3s}
+.fl a:hover{color:#fff}
+.fb{padding-top:26px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--mute)}
+.fb .d{max-width:520px;opacity:.75}
 
-  .pill{
-    display:inline-flex;align-items:center;gap:10px;padding:8px 16px 8px 12px;border-radius:100px;
-    background:linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.04));
-    backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 0 0 1px rgba(255,255,255,.1);
-    font-size:13px;font-weight:600;color:var(--ice-200);
-  }
-  .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan-400);box-shadow:0 0 10px 2px rgba(94,230,255,.8);animation:pulseDot 1.8s ease-in-out infinite;}
-
-  .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;width:100%;}
-  .intro{opacity:0;translate:0 28px;}
-  body.loaded .intro{animation:introIn 1.1s var(--ease) forwards;animation-delay:calc((var(--d,0) + 450) * 1ms);}
-  @keyframes introIn{to{opacity:1;translate:0 0;}}
-  .hero-title{font-size:clamp(54px,7.4vw,100px);line-height:.98;font-weight:800;letter-spacing:-0.04em;margin:26px 0 26px;}
-  .mask{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em;}
-  .rise{display:inline-block;transform:translateY(112%) rotate(3deg);transform-origin:0 100%;}
-  body.loaded .rise{animation:rise 1.3s var(--ease) forwards;animation-delay:calc((var(--d,0) + 450) * 1ms);}
-  @keyframes rise{to{transform:translateY(0) rotate(0);}}
-  .shine{
-    background:linear-gradient(100deg, #fff 10%, var(--cyan-400) 35%, var(--blue-400) 55%, #fff 75%, var(--cyan-400) 95%);
-    background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:titleShine 6s linear infinite;
-  }
-  @keyframes titleShine{0%{background-position:0% 50%;}100%{background-position:-280% 50%;}}
-  .hero-copy{max-width:500px;font-size:18px;line-height:1.7;color:var(--ice-200);}
-  .hero-ctas{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;}
-
-  .hex-stage{position:relative;height:520px;perspective:1400px;display:flex;align-items:center;justify-content:center;}
-  .hex-aura{
-    position:absolute;width:420px;height:420px;border-radius:50%;
-    background:conic-gradient(from 0deg, rgba(94,230,255,.4), rgba(59,107,255,0) 28%, rgba(94,230,255,0) 72%, rgba(94,230,255,.4));
-    filter:blur(42px);opacity:.75;animation:spin 14s linear infinite;
-  }
-  .hex-ground{
-    position:absolute;bottom:34px;left:50%;width:230px;height:38px;translate:-50% 0;border-radius:50%;
-    background:radial-gradient(closest-side, rgba(2,8,30,.7), transparent);animation:groundPulse 6s ease-in-out infinite;
-  }
-  @keyframes groundPulse{0%,100%{scale:1;opacity:.9;}50%{scale:.8;opacity:.55;}}
-  .hex-float{position:relative;transform-style:preserve-3d;animation:hexFloat 6s ease-in-out infinite;}
-  @keyframes hexFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
-  .hex-scene{
-    position:relative;width:340px;height:340px;display:flex;align-items:center;justify-content:center;
-    transform-style:preserve-3d;transform:rotateX(8deg) rotateY(-10deg);will-change:transform;
-  }
-  .hex-logo{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 24px 34px rgba(2,8,30,.6)) drop-shadow(0 0 40px rgba(59,107,255,.45));}
-
-  .scroll-hint{
-    position:absolute;left:50%;bottom:34px;translate:-50% 0;display:flex;align-items:center;gap:14px;
-    font-family:'Sora',sans-serif;font-size:13px;font-weight:500;color:var(--ice-300);
-    opacity:0;animation:introIn 1s var(--ease) forwards 2.2s;
-  }
-  .scroll-hint i{display:block;width:46px;height:1px;background:linear-gradient(90deg, transparent, var(--cyan-400));position:relative;overflow:hidden;}
-  .scroll-hint i::after{
-    content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:#fff;animation:hintRun 2s ease-in-out infinite;
-  }
-  @keyframes hintRun{0%{left:-100%;}60%,100%{left:100%;}}
-
-  .game-wrap{width:100%;max-width:1180px;padding:0 var(--pad);}
-  .game-head{max-width:640px;margin-bottom:40px;}
-  .game-head h2{font-size:clamp(34px,4.4vw,52px);font-weight:700;line-height:1.06;}
-  .game-head p{margin-top:16px;font-size:17px;line-height:1.7;color:var(--ice-300);max-width:560px;}
-  .game-panel{display:block;}
-  .game-panel > .card-body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:44px;align-items:center;padding:44px 48px;}
-  .game-icon-block{display:flex;flex-direction:column;align-items:center;gap:14px;}
-  .game-icon{
-    width:130px;height:130px;border-radius:32px;
-    background:linear-gradient(150deg, var(--blue-400), var(--blue-700) 70%);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:inset 0 2px 2px rgba(255,255,255,.5), inset 0 -8px 16px rgba(0,0,0,.3), 0 26px 50px -14px rgba(37,84,224,.8);
-    position:relative;animation:floatY 5s ease-in-out infinite;
-  }
-  .game-icon::after{content:'';position:absolute;inset:0;border-radius:32px;border:1px solid rgba(255,255,255,.35);}
-  .game-name{font-family:'Sora',sans-serif;font-weight:600;font-size:17px;letter-spacing:-0.01em;}
-  .game-status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cyan-400);font-weight:600;}
-  .game-status .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan-400);box-shadow:0 0 8px 2px rgba(94,230,255,.8);animation:pulseDot 1.8s ease-in-out infinite;}
-  .stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;min-width:0;}
-  .stat-card{border-radius:var(--r-md);min-width:0;}
-  .stat-card .card-body{padding:24px 22px;}
-  .stat-ico{
-    width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:22px;
-    background:linear-gradient(150deg, rgba(110,147,255,.55), rgba(23,57,176,.55));box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
-  }
-  .stat-ico svg{width:19px;height:19px;}
-  .stat-num{
-    font-family:'Sora',sans-serif;font-size:clamp(20px,2.1vw,30px);font-weight:700;letter-spacing:-0.03em;
-    font-variant-numeric:tabular-nums;white-space:nowrap;
-  }
-  .stat-label{margin-top:6px;font-size:14px;color:var(--ice-300);font-weight:500;}
-
-  .carousel{
-    position:absolute;inset:0;perspective:1500px;
-    perspective-origin:calc(50% + var(--px)) calc(46% + var(--py));
-    transform-style:preserve-3d;
-  }
-  .panel{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform;}
-  .slice{
-    position:absolute;left:0;top:0;width:calc(var(--sw) + .7px);height:var(--ph);overflow:hidden;
-    will-change:transform;backface-visibility:hidden;
-  }
-  .slice-inner{position:absolute;top:0;left:calc(var(--sw) * var(--i) * -1);width:var(--pw);height:var(--ph);}
-  .panel-hit{
-    position:absolute;left:calc(var(--pw) / -2);top:calc(var(--ph) / -2);width:var(--pw);height:var(--ph);
-    transform:translateZ(90px);opacity:0;cursor:pointer;border-radius:2em;
-  }
-
-  .pc{
-    position:relative;width:100%;height:100%;border-radius:2.4em;overflow:hidden;color:#fff;
-    font-family:'Plus Jakarta Sans',sans-serif;font-size:calc(var(--pw) / 28);
-    background:
-      linear-gradient(115deg, rgba(255,255,255,.24) 0%, rgba(255,255,255,.06) 38%, rgba(255,255,255,.03) 58%, rgba(255,255,255,.14) 100%),
-      linear-gradient(180deg, rgba(60,100,230,.4), rgba(8,17,43,.8));
-    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.28), inset 0 2px 0 rgba(255,255,255,.55), inset 0 -2.4em 3em -2em rgba(59,107,255,.45);
-  }
-  .pc::after{
-    content:'';position:absolute;inset:0;pointer-events:none;z-index:4;
-    background:linear-gradient(105deg, transparent calc(var(--sheen,50%) - 20%), rgba(255,255,255,.2) var(--sheen,50%), transparent calc(var(--sheen,50%) + 20%));
-  }
-  .pc-dim{position:absolute;inset:0;z-index:5;pointer-events:none;background:rgba(4,8,22,var(--dim,0));}
-  .pc-glow{
-    position:absolute;right:-6em;top:-6em;width:20em;height:20em;border-radius:50%;
-    background:radial-gradient(closest-side, var(--g,#3B6BFF), transparent 72%);opacity:.5;
-  }
-  .pc.social{display:flex;flex-direction:column;justify-content:space-between;padding:2.2em 2.4em;}
-  .pc-top{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:1em;}
-  .pc-ico{
-    width:3.4em;height:3.4em;border-radius:1.05em;display:flex;align-items:center;justify-content:center;flex:none;
-    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 -4px 10px rgba(0,0,0,.25), 0 14px 26px -10px rgba(2,8,30,.8);
-  }
-  .pc-ico svg{width:1.55em;height:1.55em;color:#fff;}
-  .pc-ghost{
-    font-family:'Sora',sans-serif;font-weight:800;font-size:2.7em;letter-spacing:-.04em;line-height:1;
-    color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.26);white-space:nowrap;
-  }
-  .pc-bottom{position:relative;}
-  .pc-bottom h3{font-size:1.9em;font-weight:700;line-height:1.1;}
-  .pc-bottom p{margin-top:.55em;font-size:.82em;line-height:1.55;color:var(--ice-300);max-width:22em;}
-  .pc-handle{margin-top:1.1em;display:inline-flex;align-items:center;gap:.6em;font-size:.82em;font-weight:600;color:var(--cyan-400);}
-  .pc-handle svg{width:1.1em;height:1.1em;}
-  .pc.teamc{display:flex;align-items:center;gap:2.2em;padding:0 3em;}
-  .pc-avatar{
-    position:relative;flex:none;width:9.4em;height:9.4em;border-radius:50%;
-    background:linear-gradient(150deg, var(--blue-400), var(--blue-700));background-size:cover;background-position:center;
-    box-shadow:0 0 0 .22em rgba(94,230,255,.55), 0 0 0 .5em rgba(255,255,255,.06), 0 24px 40px -14px rgba(2,8,30,.85), inset 0 2px 3px rgba(255,255,255,.35);
-  }
-  .pc-info{position:relative;min-width:0;}
-  .pc-tag{
-    display:inline-flex;padding:.4em 1em;border-radius:100px;font-size:.72em;font-weight:600;color:var(--ice-200);
-    background:linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 0 0 1px rgba(255,255,255,.1);
-  }
-  .pc-info h3{margin-top:.8em;font-size:2.1em;font-weight:700;line-height:1.1;overflow-wrap:anywhere;}
-  .pc-job{display:block;margin-top:.55em;font-size:.9em;font-weight:500;color:var(--cyan-400);}
-
-  .hud{
-    position:fixed;left:0;right:0;bottom:30px;z-index:30;pointer-events:none;opacity:0;visibility:hidden;
-    display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
-    padding:0 max(var(--pad), calc((100vw - 1180px) / 2 + var(--pad)));
-  }
-  .hud-left{max-width:620px;}
-  .hud-kicker{font-family:'Sora',sans-serif;font-size:13px;font-weight:500;color:var(--cyan-400);font-variant-numeric:tabular-nums;}
-  .hud-title{margin-top:10px;font-family:'Sora',sans-serif;font-size:clamp(26px,3.2vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1.08;}
-  .hud-desc{margin-top:10px;font-size:15px;line-height:1.6;color:var(--ice-300);}
-  .hud-tags{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;}
-  .hud-tags span{
-    padding:6px 14px;border-radius:100px;font-size:12.5px;font-weight:600;color:var(--ice-200);
-    background:linear-gradient(135deg, rgba(255,255,255,.2), rgba(255,255,255,.05));box-shadow:inset 0 1px 0 rgba(255,255,255,.45), inset 0 0 0 1px rgba(255,255,255,.1);
-  }
-  .hud.swap .hud-kicker,.hud.swap .hud-title,.hud.swap .hud-desc,.hud.swap .hud-tags{animation:hudIn .7s var(--ease) both;}
-  .hud.swap .hud-title{animation-delay:.05s;}
-  .hud.swap .hud-desc{animation-delay:.1s;}
-  .hud.swap .hud-tags{animation-delay:.15s;}
-  @keyframes hudIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-  .hud-more{
-    pointer-events:auto;font-family:'Sora',sans-serif;font-size:15px;font-weight:600;white-space:nowrap;
-    padding:12px 22px;border-radius:100px;
-    background:linear-gradient(135deg, rgba(255,255,255,.2), rgba(255,255,255,.05));
-    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-    box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55), inset 0 0 0 1px rgba(255,255,255,.12);
-    transition:transform .4s var(--ease), box-shadow .4s var(--ease);
-  }
-  .hud-more:hover{transform:translateY(-3px);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7), inset 0 0 0 1px rgba(94,230,255,.4), 0 18px 36px -14px rgba(37,84,224,.7);}
-  .hud-more[hidden]{display:none;}
-
-  .join-wrap{width:100%;max-width:1180px;padding:0 var(--pad);}
-  .join-h2{font-size:clamp(32px,4.6vw,68px);font-weight:700;line-height:1.05;letter-spacing:-.035em;margin-top:20px;max-width:1000px;}
-  .jw{display:inline-block;opacity:.16;will-change:opacity,transform;}
-  .join-rest{
-    margin-top:30px;opacity:0;translate:0 40px;pointer-events:none;
-    transition:opacity .9s var(--ease), translate 1s var(--ease);
-  }
-  .join-rest.on{opacity:1;translate:0 0;pointer-events:auto;}
-  .join-rest > p{max-width:620px;font-size:16.5px;line-height:1.7;color:var(--ice-200);}
-  .marquee{
-    margin:28px calc(var(--pad) * -1) 30px;display:flex;flex-direction:column;gap:12px;overflow:hidden;
-    -webkit-mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-    mask-image:linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-  }
-  .marquee-row{display:flex;gap:12px;width:max-content;animation:marquee 34s linear infinite;}
-  .marquee-row.rev{animation-direction:reverse;animation-duration:40s;}
-  .marquee:hover .marquee-row{animation-play-state:paused;}
-  @keyframes marquee{to{transform:translateX(calc(-50% - 6px));}}
-  .role{
-    flex:none;padding:11px 22px;border-radius:100px;font-size:14px;font-weight:500;color:var(--ice-200);
-    background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.5), inset 0 0 0 1px rgba(255,255,255,.1);
-  }
-  .join-cta{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-  .join-note{font-size:13.5px;color:var(--ice-300);max-width:340px;line-height:1.5;}
-
-  .footer-card{width:calc(100% - var(--pad) * 2);max-width:980px;}
-  .footer-card .card-body{padding:46px 48px;}
-  .footer-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:30px;border-bottom:1px solid rgba(255,255,255,.12);flex-wrap:wrap;gap:24px;}
-  .footer-brand{display:flex;align-items:center;gap:12px;font-family:'Sora',sans-serif;font-weight:700;font-size:20px;letter-spacing:-0.02em;}
-  .footer-links{display:flex;gap:30px;flex-wrap:wrap;}
-  .footer-links button{font-size:14.5px;color:var(--ice-300);transition:color .3s ease;}
-  .footer-links button:hover{color:#fff;}
-  .footer-bottom{padding-top:26px;display:flex;justify-content:space-between;font-size:13px;color:var(--slate-400);flex-wrap:wrap;gap:12px;}
-  .footer-bottom .disclaimer{max-width:480px;opacity:.8;line-height:1.55;}
-
-  @media (max-height:760px){
-    .scene{padding:84px 0 70px;}
-    .game-head{margin-bottom:26px;}
-    .game-head p{display:none;}
-    .join-h2{font-size:clamp(28px,4vw,52px);}
-    .marquee{margin:20px calc(var(--pad) * -1) 22px;}
-    .hex-stage{height:420px;}
-    .hex-scene{width:290px;height:290px;}
-  }
-  @media (max-width:1080px){
-    .side-index span{display:none;}
-  }
-  @media (max-width:980px){
-    .nav-links,.nav-cta{display:none;}
-    .nav-toggle{display:flex;}
-    .hero-inner{grid-template-columns:1fr;gap:10px;}
-    .hex-stage{height:300px;order:-1;}
-    .hex-scene{width:240px;height:240px;}
-    .hex-aura{width:300px;height:300px;}
-    .game-panel > .card-body{grid-template-columns:minmax(0,1fr);text-align:center;gap:26px;padding:30px 24px;}
-    .stat-row{grid-template-columns:minmax(0,1fr);gap:12px;}
-    .stat-card{text-align:left;}
-    .stat-card .card-body{padding:16px 20px;display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center;}
-    .stat-ico{margin:0;grid-row:1 / span 2;}
-    .stat-num{font-size:26px;}
-    .stat-label{margin-top:2px;}
-    .game-head p{display:none;}
-    .scene-title p{display:none;}
-  }
-  @media (max-width:700px){
-    :root{--pad:20px;}
-    .side-index{display:none;}
-    .hero-title{font-size:clamp(46px,14vw,70px);}
-    .hero-copy{font-size:16px;}
-    .hero-ctas{margin-top:26px;}
-    .scene-title{top:96px;}
-    .hud{bottom:20px;flex-direction:column;align-items:flex-start;gap:14px;}
-    .hud-desc{display:none;}
-    .footer-card .card-body{padding:30px 24px;}
-    .footer-top,.footer-bottom{flex-direction:column;align-items:flex-start;}
-    .loader-logo-wrap{width:240px;height:240px;}
-    .loader-ring{width:232px;height:232px;}
-    .loader-aura{width:320px;height:320px;}
-    .loader-logo{width:200px;height:200px;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;transition-delay:0s !important;}
-    .marquee-row{animation:none;}
-  }
+@media(max-width:1000px){
+  .h-in{grid-template-columns:1fr}
+  .stage{height:440px;order:-1}
+  .feat{grid-template-columns:1fr 1fr}
+  .gp{grid-template-columns:1fr;text-align:center;padding:40px 28px}
+  .sg{grid-template-columns:1fr 1fr}
+  .tg{grid-template-columns:repeat(3,1fr)}.tg.staff{grid-template-columns:1fr 1fr}
+  .owner{grid-template-columns:1fr;text-align:center;justify-items:center}
+}
+@media(max-width:760px){
+  .wrap{padding:0 20px}
+  .menu,.bar-r .btn,.bar-r .ibtn{display:none}
+  .burger{display:flex}
+  .bar-in{grid-template-columns:1fr auto;height:62px}
+  .feat,.sg,.stats{grid-template-columns:1fr}
+  .tg,.tg.staff{grid-template-columns:1fr 1fr}
+  .sec{padding:90px 0}
+  .fb{flex-direction:column}
+  .jp{padding:44px 24px}
+  .c-bt{width:200px}.c-sv{width:170px}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
 </style>
 </head>
-<body class="locked">
+<body>
 
-  <div class="bgs">
-    <div class="bg b1" id="bg1"></div>
-    <div class="bg b4" id="bg4"></div>
-    <div class="bg b2" id="bg2"></div>
-    <div class="bg-tint"></div>
+<div id="loader">
+  <div class="l-core">
+    <img src="assets/images/zeramonstudio-logo.png" alt="Zeramon Studio">
+    <div class="l-bar"><b id="lbar"></b></div>
+    <div class="l-pct"><span id="lpct">0</span>%</div>
   </div>
-  <canvas id="env"></canvas>
-  <div class="shards" id="shards"></div>
-  <div class="vignette"></div>
+</div>
 
-  <div class="progress" id="progress"></div>
-  <div class="cursor-glow" id="cursorGlow"></div>
+<div class="bg"><i></i><i></i><i></i></div>
+<div id="glow"></div>
 
-  <div id="loader">
-    <div class="loader-bg-image"></div>
-    <div class="loader-bg-filter"></div>
-    <div class="loader-content">
-      <div class="loader-logo-wrap">
-        <div class="loader-aura"></div>
-        <div class="loader-ring"></div>
-        <img class="loader-logo" src="assets/images/zeramonstudio-logo.png" alt="Zeramon Studio logo">
+<header class="bar" id="bar">
+  <div class="bar-in">
+    <a href="#hero" class="brand"><img src="assets/images/zeramon-logo.png" alt="Zeramon logo">Zeramon Studio</a>
+    <nav class="menu" id="menu">
+      <span class="ind" id="ind"></span>
+      <a href="#about">Game</a>
+      <a href="#game">Live</a>
+      <a href="#links">Community</a>
+      <a href="#team">Team</a>
+      <a href="#join">Careers</a>
+    </nav>
+    <div class="bar-r">
+      <a href="https://discord.gg/kvsRArNm8n" target="_blank" rel="noopener" class="ibtn" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg></a>
+      <a href="#game" class="btn btn-p btn-s">Play on Roblox</a>
+      <button class="burger" id="burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+    <div class="pbar" id="pbar"></div>
+  </div>
+</header>
+
+<div class="mmenu" id="mmenu">
+  <a href="#about">Game</a>
+  <a href="#game">Live</a>
+  <a href="#links">Community</a>
+  <a href="#team">Team</a>
+  <a href="#join">Careers</a>
+</div>
+
+<main>
+<section id="hero">
+  <div class="h-bg" id="hbg"></div>
+  <div class="h-shade"></div>
+  <canvas id="fx"></canvas>
+  <div class="wrap h-in">
+    <div>
+      <span class="tag"><i></i>Coming soon to Roblox</span>
+      <h1 class="h-title">
+        <span class="ln"><span>Catch all</span></span>
+        <span class="ln g"><span>of them.</span></span>
+      </h1>
+      <p class="h-copy">Zeramon Adventures is a creature capture game built for Roblox. Explore regions, capture wild Zeramons, and fight real-time battles on your way to becoming a Legend.</p>
+      <div class="h-cta">
+        <a href="#game" class="btn btn-p mag">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Play on Roblox
+        </a>
+        <a href="#links" class="btn btn-g mag">Join the community</a>
       </div>
-      <div class="loader-progress"><div class="loader-progress-bar" id="loaderBar"></div></div>
-      <div class="loader-percent"><span id="loaderPercent">0</span>%</div>
+    </div>
+    <div class="stage" id="stage">
+      <div class="sc3" id="sc3">
+        <div class="glass hc z1"><img class="z3" src="assets/images/zeramon-logo.png" alt="Zeramon logo"><div class="cap z2">Zeramon Adventures</div></div>
+        <div class="glass chip c-bt z3">
+          <small>Real-time battle</small>
+          <div class="hp"><span>You</span><b></b></div>
+          <div class="hp e"><span>Foe</span><b></b></div>
+        </div>
+        <div class="glass chip c-sv z3"><i></i><div><small style="margin:0">Servers</small>Online now</div></div>
+      </div>
     </div>
   </div>
+  <div class="ticker">
+    <div class="tk">
+      <span>Capture<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Real-time battles<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Explore<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Trade<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Evolve<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Become a Legend<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg></span>
+      <span>Capture<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Real-time battles<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Explore<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Trade<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Evolve<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg>Become a Legend<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l9 5v10l-9 5-9-5V7z"/></svg></span>
+    </div>
+  </div>
+</section>
 
-  <header class="site-nav" id="siteNav">
-    <div class="nav-inner">
-      <a href="#hero" class="brand" data-goto="hero">
-        <span class="brand-mark"><img src="assets/images/zeramon-logo.png" alt="Zeramon logo"></span>
-        Zeramon Studio
+<section id="about" class="sec">
+  <div class="wrap">
+    <div class="s-head rv">
+      <h2>One world, endless creatures.</h2>
+      <p>We build Zeramon Adventures around four ideas: catch them, fight with them live, discover new regions, and share your collection.</p>
+    </div>
+    <div class="feat">
+      <article class="glass tilt fc rv">
+        <div class="ic z2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h6M15 12h6"/><circle cx="12" cy="12" r="3" fill="#fff"/></svg></div>
+        <h3 class="z1">Capture</h3>
+        <p class="z1">Track down wild Zeramons across every region and add them to your team.</p>
+      </article>
+      <article class="glass tilt fc rv">
+        <div class="ic z2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div>
+        <h3 class="z1">Battle</h3>
+        <p class="z1">Fight in real time against players and trainers. Every move happens live, so reflexes and timing decide the winner.</p>
+      </article>
+      <article class="glass tilt fc rv">
+        <div class="ic z2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+        <h3 class="z1">Explore</h3>
+        <p class="z1">Cross forests, caves and cities, and uncover secrets hidden in every corner of the map.</p>
+      </article>
+      <article class="glass tilt fc rv">
+        <div class="ic z2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h13l-3-3M17 17H4l3 3"/></svg></div>
+        <h3 class="z1">Trade</h3>
+        <p class="z1">Swap Zeramons with friends, complete your collection and chase the rarest finds.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="game" class="sec">
+  <div class="wrap">
+    <div class="s-head rv">
+      <h2>The game, live.</h2>
+      <p>Real numbers pulled straight from the Roblox experience, updated as the world of Zeramon Adventures grows.</p>
+    </div>
+    <div class="glass tilt gp rv" id="gp">
+      <div class="gi z2">
+        <div class="box"><img id="gameIconImg" src="assets/images/zeramon-logo.png" alt="Zeramon logo"></div>
+        <b id="gameNameText">Zeramon</b>
+        <em>Servers online</em>
+      </div>
+      <div class="stats z1">
+        <div class="glass tilt st"><div class="n z1" data-stat="visits" data-count="12400000" data-suffix="+">0</div><div class="l z1">Total visits</div></div>
+        <div class="glass tilt st"><div class="n z1" data-stat="playing" data-count="3218">0</div><div class="l z1">Active players</div></div>
+        <div class="glass tilt st"><div class="n z1" data-stat="likes" data-count="541000" data-suffix="+">0</div><div class="l z1">Likes</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="links" class="sec">
+  <div class="wrap">
+    <div class="s-head rv">
+      <h2>Follow Zeramon.</h2>
+      <p>News, sneak peeks and updates go out here first. Pick your platform.</p>
+    </div>
+    <div class="sg">
+      <a class="glass tilt sc rv" href="#" target="_blank" rel="noopener">
+        <div class="si z2" style="background:#000;border:1px solid rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M16.5 3c.4 2.2 1.9 3.8 4.5 4v3c-1.6 0-3.1-.5-4.5-1.4v6.6c0 3.4-2.7 6.1-6.1 6.1S4.3 18.6 4.3 15.2 7 9.1 10.4 9.1c.4 0 .8 0 1.2.1v3.1c-.4-.1-.8-.2-1.2-.2-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3V3h3.1z"/></svg></div>
+        <h3 class="z1">TikTok</h3><p class="z1">Fast updates, clips &amp; teasers.</p>
+        <span class="sh z1">@playzeramon <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
-      <nav class="nav-links" id="navLinks">
-        <span class="nav-indicator" id="navIndicator"></span>
-        <a href="#game" data-goto="game">Play</a>
-        <a href="#links" data-goto="links">Community</a>
-        <a href="#team" data-goto="team">Team</a>
-        <a href="#join" data-goto="join">Careers</a>
-      </nav>
-      <a href="#game" class="nav-cta magnetic" data-goto="game">Play on Roblox</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <a class="glass tilt sc rv" href="#" target="_blank" rel="noopener">
+        <div class="si z2" style="background:linear-gradient(150deg,#ff5757,#b30000)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M22 12s0-3.2-.4-4.7c-.3-.9-1-1.6-1.9-1.9C18.2 5 12 5 12 5s-6.2 0-7.7.4c-.9.3-1.6 1-1.9 1.9C2 8.8 2 12 2 12s0 3.2.4 4.7c.3.9 1 1.6 1.9 1.9C5.8 19 12 19 12 19s6.2 0 7.7-.4c.9-.3 1.6-1 1.9-1.9.4-1.5.4-4.7.4-4.7zM10 15.2V8.8L15.5 12 10 15.2z"/></svg></div>
+        <h3 class="z1">YouTube</h3><p class="z1">Trailers, devlogs &amp; deep dives.</p>
+        <span class="sh z1">Zeramon <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="glass tilt sc rv" href="#" target="_blank" rel="noopener">
+        <div class="si z2" style="background:#000;border:1px solid rgba(255,255,255,.2)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.3 3h3.2l-7 8 8.2 10h-6.4l-5-6.5L3.8 21H.6l7.5-8.6L0 3h6.5l4.5 6z"/></svg></div>
+        <h3 class="z1">X (Twitter)</h3><p class="z1">Announcements &amp; behind the scenes.</p>
+        <span class="sh z1">@ZeramonGame <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="glass tilt sc rv" href="https://discord.gg/kvsRArNm8n" target="_blank" rel="noopener">
+        <div class="si z2" style="background:linear-gradient(150deg,#7f94ff,#4a56c9)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg></div>
+        <h3 class="z1">Discord</h3><p class="z1">Chat, events &amp; player support.</p>
+        <span class="sh z1">Join server <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="glass tilt sc rv" href="https://www.roblox.com/communities/5085788" target="_blank" rel="noopener">
+        <div class="si z2" style="background:linear-gradient(150deg,var(--sky),#1a3fc4)"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg></div>
+        <h3 class="z1">Roblox Group</h3><p class="z1">Join for perks &amp; group rewards.</p>
+        <span class="sh z1">Zeramon Official <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="glass tilt sc rv" href="#" target="_blank" rel="noopener">
+        <div class="si z2" style="background:linear-gradient(150deg,var(--sky),#1a3fc4)"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H18a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H19" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 7h7M8 10h7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <h3 class="z1">Wiki</h3><p class="z1">Zeramon list, mechanics &amp; guides.</p>
+        <span class="sh z1">Read the wiki <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
     </div>
-  </header>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#game" data-goto="game" data-menu-link>Play</a>
-    <a href="#links" data-goto="links" data-menu-link>Community</a>
-    <a href="#team" data-goto="team" data-menu-link>Team</a>
-    <a href="#join" data-goto="join" data-menu-link>Careers</a>
-    <a href="#game" class="btn btn-primary" data-goto="game" data-menu-link>Play on Roblox</a>
   </div>
+</section>
 
-  <nav class="side-index" id="sideIndex" aria-label="Sections">
-    <button data-goto="hero"><span>Top</span><i></i></button>
-    <button data-goto="game"><span>Game</span><i></i></button>
-    <button data-goto="links"><span>Community</span><i></i></button>
-    <button data-goto="team"><span>Team</span><i></i></button>
-    <button data-goto="join"><span>Careers</span><i></i></button>
-  </nav>
-
-  <div id="spacer"></div>
-
-  <main class="stage" id="stage">
-
-    <section class="scene" id="scene-hero" data-scene="hero">
-      <div class="wrap hero-inner">
-        <div class="hero-left">
-          <span class="pill intro" style="--d:0"><span class="dot"></span>Soon on Roblox</span>
-          <h1 class="hero-title">
-            <span class="mask"><span class="rise" style="--d:80">Catch all</span></span>
-            <span class="mask"><span class="rise" style="--d:200">of <span class="shine">THEM !</span></span></span>
-          </h1>
-          <p class="hero-copy intro" style="--d:420">Zeramon Adventures is a brand new creature capture game — explore regions, capture wild Zeramons, and battle your way to becoming a Legend.</p>
-          <div class="hero-ctas intro" style="--d:560">
-            <a href="#game" class="btn btn-primary magnetic" data-goto="game">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-              Play on Roblox
-            </a>
-            <a href="#links" class="btn btn-glass magnetic" data-goto="links">Join the community</a>
-          </div>
-        </div>
-        <div class="hex-stage intro" style="--d:300" id="hexStage">
-          <div class="hex-aura"></div>
-          <div class="hex-ground"></div>
-          <div class="hex-float">
-            <div class="hex-scene" id="hexScene">
-              <img class="hex-logo" src="assets/images/zeramon-logo.png" alt="Zeramon logo">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="scroll-hint">Scroll to explore<i></i></div>
-    </section>
-
-    <section class="scene" id="scene-game" data-scene="game">
-      <div class="game-wrap">
-        <div class="game-head">
-          <h2 data-words>The game, live.</h2>
-          <p class="reveal">Real numbers pulled straight from the Roblox experience — see how the world of Zeramon Adventures is growing right now.</p>
-        </div>
-        <div class="card xl game-panel reveal" style="--d:120ms">
-          <div class="face"></div>
-          <div class="card-body">
-            <div class="game-icon-block">
-              <div class="game-icon">
-                <img id="gameIconImg" src="assets/images/zeramon-logo.png" alt="Zeramon logo" style="width:78%;height:78%;object-fit:contain;">
-              </div>
-              <div class="game-name" id="gameNameText">Zeramon</div>
-              <div class="game-status"><span class="dot"></span>Servers online</div>
-            </div>
-            <div class="stat-row" data-stagger>
-              <div class="card tilt stat-card reveal" data-tilt="9">
-                <div class="face"></div>
-                <div class="card-body">
-                  <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
-                  <div class="stat-num" data-stat="visits" data-count="12400000" data-suffix="+">0</div>
-                  <div class="stat-label">Total visits</div>
-                </div>
-              </div>
-              <div class="card tilt stat-card reveal" data-tilt="9">
-                <div class="face"></div>
-                <div class="card-body">
-                  <div class="stat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.4c2.2.7 3.5 2.6 3.5 5.6"/></svg></div>
-                  <div class="stat-num" data-stat="playing" data-count="3218">0</div>
-                  <div class="stat-label">Active players</div>
-                </div>
-              </div>
-              <div class="card tilt stat-card reveal" data-tilt="9">
-                <div class="face"></div>
-                <div class="card-body">
-                  <div class="stat-ico"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 21s-8.5-5.1-8.5-11.2A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 8.5 2.8C20.5 15.9 12 21 12 21z"/></svg></div>
-                  <div class="stat-num" data-stat="likes" data-count="541000" data-suffix="+">0</div>
-                  <div class="stat-label">Likes</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-links" data-scene="links">
-      <div class="scene-title">
-        <h2 data-words>Follow Zeramon</h2>
-        <p class="reveal">News, sneak peeks, and updates go out here first. Pick your platform.</p>
-      </div>
-      <div class="carousel" id="carLinks"></div>
-    </section>
-
-    <section class="scene" id="scene-team" data-scene="team">
-      <div class="scene-title">
-        <h2 data-words>Meet the team</h2>
-        <p class="reveal">The people building, running and growing Zeramon Adventures every day.</p>
-      </div>
-      <div class="carousel" id="carTeam"></div>
-    </section>
-
-    <section class="scene" id="scene-join" data-scene="join">
-      <div class="join-wrap">
-        <span class="pill"><span class="dot"></span>You can contribute</span>
-        <h2 class="join-h2" id="joinH2">Build Zeramon with us — and get paid for it</h2>
-        <div class="join-rest" id="joinRest">
-          <p>If you are a developer, if you are looking for commissions, if you think that your skills fit our game and if you want to leave a mark in our game join our official developer hub discord server.</p>
-          <div class="marquee">
-            <div class="marquee-row">
-              <span class="role">2D Artist</span><span class="role">Scripter</span><span class="role">UI Designer</span><span class="role">Modeler</span><span class="role">VFX Artist</span><span class="role">SFX Designer</span><span class="role">Builder</span><span class="role">Animator</span><span class="role">2D Animator</span>
-              <span class="role" aria-hidden="true">2D Artist</span><span class="role" aria-hidden="true">Scripter</span><span class="role" aria-hidden="true">UI Designer</span><span class="role" aria-hidden="true">Modeler</span><span class="role" aria-hidden="true">VFX Artist</span><span class="role" aria-hidden="true">SFX Designer</span><span class="role" aria-hidden="true">Builder</span><span class="role" aria-hidden="true">Animator</span><span class="role" aria-hidden="true">2D Animator</span>
-            </div>
-            <div class="marquee-row rev">
-              <span class="role">2D Animator</span><span class="role">Animator</span><span class="role">Builder</span><span class="role">SFX Designer</span><span class="role">VFX Artist</span><span class="role">Modeler</span><span class="role">UI Designer</span><span class="role">Scripter</span><span class="role">2D Artist</span>
-              <span class="role" aria-hidden="true">2D Animator</span><span class="role" aria-hidden="true">Animator</span><span class="role" aria-hidden="true">Builder</span><span class="role" aria-hidden="true">SFX Designer</span><span class="role" aria-hidden="true">VFX Artist</span><span class="role" aria-hidden="true">Modeler</span><span class="role" aria-hidden="true">UI Designer</span><span class="role" aria-hidden="true">Scripter</span><span class="role" aria-hidden="true">2D Artist</span>
-            </div>
-          </div>
-          <div class="join-cta">
-            <a href="https://discord.gg/VKtPp9REqH" target="_blank" rel="noopener" class="btn btn-primary magnetic">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>
-              Join the Discord server
-            </a>
-            <div class="join-note">More information in the server — show us your work, we'll find the right task for you.</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-footer" data-scene="footer">
-      <div class="card xl footer-card reveal">
-        <div class="face"></div>
-        <div class="card-body">
-          <div class="footer-top">
-            <div class="footer-brand">
-              <span class="brand-mark" style="width:30px;height:30px;"><img src="assets/images/zeramon-logo.png" alt="Zeramon logo"></span>
-              Zeramon Studio
-            </div>
-            <div class="footer-links">
-              <button data-goto="hero">Home</button>
-              <button data-goto="game">Play</button>
-              <button data-goto="links">Community</button>
-              <button data-goto="team">Team</button>
-              <button data-goto="join">Careers</button>
-            </div>
-          </div>
-          <div class="footer-bottom">
-            <span>© 2026 Zeramon Studio. All rights reserved. (made by its_ed007)</span>
-            <span class="disclaimer">Zeramon Adventures is an independent Roblox experience and is not affiliated with, endorsed by, or sponsored by Roblox Corporation or Nintendo/The Pokémon Company.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <div class="hud" id="hud">
-    <div class="hud-left">
-      <div class="hud-kicker" id="hudKicker"></div>
-      <div class="hud-title" id="hudTitle"></div>
-      <div class="hud-desc" id="hudDesc"></div>
-      <div class="hud-tags" id="hudTags"></div>
+<section id="team" class="sec">
+  <div class="wrap">
+    <div class="s-head rv">
+      <h2>Meet the team.</h2>
+      <p>The people building, running and growing Zeramon Adventures every day.</p>
     </div>
-    <a class="hud-more" id="hudMore" target="_blank" rel="noopener" hidden>Open ↗</a>
+
+    <div class="tb rv">
+      <div class="glass tilt owner">
+        <div class="av z2"><img src="assets/images/team/owner.png" alt="Owner"></div>
+        <div class="z1">
+          <div class="nm">Depx_i</div>
+          <div class="jb">Founder, Owner &amp; Developer</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tb rv">
+      <div class="tl">Developers</div>
+      <div class="tg">
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/dev1.png" alt="Dev 1"></div><div class="nm z1">MoonLight</div><div class="jb z1">Developer</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/dev2.png" alt="Dev 2"></div><div class="nm z1">Tan</div><div class="jb z1">Developer</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/dev3.png" alt="Dev 3"></div><div class="nm z1">Haos_Dino</div><div class="jb z1">Developer</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/dev4.png" alt="Dev 4"></div><div class="nm z1">Vtnt</div><div class="jb z1">Developer</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/dev5.png" alt="Dev 5"></div><div class="nm z1">tommy590590</div><div class="jb z1">Developer</div></div>
+      </div>
+    </div>
+
+    <div class="tb rv">
+      <div class="tl">Staff</div>
+      <div class="tg staff">
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/admin.png" alt="Admin"></div><div class="nm z1">ED</div><div class="jb z1">Admin</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/cm.png" alt="Community Manager"></div><div class="nm z1">TeGiyu</div><div class="jb z1">Community Manager</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/qa.png" alt="QA Manager"></div><div class="nm z1">Galaxy</div><div class="jb z1">QA Manager</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/ccm.png" alt="Content Creator Manager"></div><div class="nm z1">Adam</div><div class="jb z1">Content Creator Manager</div></div>
+      </div>
+    </div>
   </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="glass tilt jp rv">
+      <span class="tag z1"><i></i>You can contribute</span>
+      <h2 class="z2">Build Zeramon with us and get paid for it.</h2>
+      <p class="z1">Developer, commission artist, or someone whose skills fit our game and who wants to leave a mark on it? Join our official developer hub on Discord.</p>
+      <div class="pills z1">
+        <span>2D Artist</span><span>Scripter</span><span>UI Designer</span><span>Modeler</span><span>VFX Artist</span><span>SFX Designer</span><span>Builder</span><span>Animator</span>
+      </div>
+      <a href="https://discord.gg/VKtPp9REqH" target="_blank" rel="noopener" class="btn btn-p mag z2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>
+        Join the Discord server
+      </a>
+      <div class="jn z1">Show us your work and we'll find the right task for you.</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="ft">
+      <a href="#hero" class="brand"><img src="assets/images/zeramon-logo.png" alt="Zeramon logo">Zeramon Studio</a>
+      <div class="fl">
+        <a href="#hero">Home</a><a href="#about">Game</a><a href="#links">Community</a><a href="#team">Team</a><a href="#join">Careers</a>
+      </div>
+    </div>
+    <div class="fb">
+      <span>© 2026 Zeramon Studio. All rights reserved. (made by its_ed007)</span>
+      <span class="d">Zeramon Adventures is an independent Roblox experience and is not affiliated with, endorsed by, or sponsored by Roblox Corporation or Nintendo/The Pokémon Company.</span>
+    </div>
+  </div>
+</footer>
 
 <script>
-  const ZERAMON_PLACE_ID = "0000000000";
-  const STATS_WORKER_URL = "https://zeramon-stats.YOUR-SUBDOMAIN.workers.dev";
+const ZERAMON_PLACE_ID="0000000000";
+const STATS_WORKER_URL="https://zeramon-stats.YOUR-SUBDOMAIN.workers.dev";
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 
-  async function loadLiveStats(){
-    if(!ZERAMON_PLACE_ID || ZERAMON_PLACE_ID === "0000000000") return;
-    try{
-      const res = await fetch(`${STATS_WORKER_URL}/?placeId=${ZERAMON_PLACE_ID}`);
-      if(!res.ok) throw new Error("worker responded with " + res.status);
-      const data = await res.json();
-      if(data.error) throw new Error(data.error);
-      if(data.name){
-        document.getElementById('gameNameText').textContent = data.name;
-      }
-      if(data.iconUrl){
-        document.getElementById('gameIconImg').src = data.iconUrl;
-        document.getElementById('gameIconImg').style.objectFit = 'cover';
-      }
-      const statMap = { visits: data.visits, playing: data.playing, likes: data.likes };
-      document.querySelectorAll('.stat-num[data-stat]').forEach(el=>{
-        const key = el.getAttribute('data-stat');
-        if(statMap[key] != null){
-          el.setAttribute('data-count', Math.floor(statMap[key]));
-          el.setAttribute('data-suffix', '');
-        }
-      });
-    }catch(err){
-      console.warn('Live stats unavailable, showing fallback numbers:', err.message);
-    }
+async function loadLiveStats(){
+  if(!ZERAMON_PLACE_ID||ZERAMON_PLACE_ID==="0000000000")return;
+  try{
+    const res=await fetch(`${STATS_WORKER_URL}/?placeId=${ZERAMON_PLACE_ID}`);
+    if(!res.ok)throw new Error("worker responded with "+res.status);
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    if(d.name)$('#gameNameText').textContent=d.name;
+    if(d.iconUrl){const i=$('#gameIconImg');i.src=d.iconUrl;i.style.objectFit='cover';i.style.width=i.style.height='100%'}
+    const m={visits:d.visits,playing:d.playing,likes:d.likes};
+    $$('.n[data-stat]').forEach(el=>{
+      const v=m[el.dataset.stat];
+      if(v!=null){el.dataset.count=Math.floor(v);el.dataset.suffix=''}
+    });
+  }catch(e){console.warn('Live stats unavailable, showing fallback numbers:',e.message)}
+}
+loadLiveStats();
+
+const lbar=$('#lbar'),lpct=$('#lpct');
+let p=0;
+const lt=setInterval(()=>{
+  p=Math.min(100,p+Math.random()*13+5);
+  lpct.textContent=Math.floor(p);
+  lbar.style.width=p+'%';
+  if(p>=100){clearInterval(lt);setTimeout(start,450)}
+},200);
+function start(){
+  $('#loader').classList.add('done');
+  document.body.classList.add('go');
+  setTimeout(()=>{$('#loader').style.display='none'},1300);
+}
+
+const bar=$('#bar'),pbar=$('#pbar'),hbg=$('#hbg');
+const secs=[...$$('main section')],links=[...$$('#menu a')],ind=$('#ind'),menu=$('#menu');
+let lastY=0,curId='';
+function moveInd(a){
+  if(!a){ind.style.opacity=0;return}
+  ind.style.opacity=1;
+  ind.style.width=a.offsetWidth+'px';
+  ind.style.transform=`translateX(${a.offsetLeft}px)`;
+}
+links.forEach(a=>a.addEventListener('mouseenter',()=>moveInd(a)));
+menu.addEventListener('mouseleave',()=>moveInd(links.find(a=>a.classList.contains('on'))));
+addEventListener('resize',()=>moveInd(links.find(a=>a.classList.contains('on'))));
+addEventListener('scroll',()=>{
+  const y=scrollY,h=document.documentElement.scrollHeight-innerHeight;
+  bar.classList.toggle('solid',y>60);
+  bar.classList.toggle('hide',y>lastY&&y>240&&!mm.classList.contains('open'));
+  lastY=y;
+  pbar.style.width=(y/h*100)+'%';
+  if(y<innerHeight*1.3)hbg.style.transform=`translateY(${y*.25}px) scale(1.05)`;
+  let id='';
+  secs.forEach(s=>{if(y>=s.offsetTop-320)id=s.id});
+  if(id!==curId){
+    curId=id;
+    links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));
+    moveInd(links.find(a=>a.classList.contains('on')));
   }
-  loadLiveStats();
+},{passive:true});
 
-  const $ = (id)=> document.getElementById(id);
-  const clamp = (v, a = 0, b = 1)=> Math.min(b, Math.max(a, v));
-  const smooth = (v)=> v * v * (3 - 2 * v);
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const root = document.documentElement;
+const burger=$('#burger'),mm=$('#mmenu');
+burger.addEventListener('click',()=>{
+  const o=mm.classList.toggle('open');
+  burger.classList.toggle('open',o);
+  burger.style.position='relative';burger.style.zIndex=90;
+  document.body.style.overflow=o?'hidden':'';
+});
+$$('#mmenu a').forEach(a=>a.addEventListener('click',()=>{
+  mm.classList.remove('open');burger.classList.remove('open');document.body.style.overflow='';
+}));
 
-  const ICON_ARROW = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    const sib=[...e.target.parentElement.children].filter(c=>c.classList.contains('rv'));
+    e.target.style.transitionDelay=Math.max(0,sib.indexOf(e.target))*110+'ms';
+    e.target.classList.add('in');
+    io.unobserve(e.target);
+  }
+}),{threshold:.12});
+$$('.rv').forEach(el=>io.observe(el));
 
-  const socials = [
-    {
-      title:'TikTok', desc:'Fast updates, clips & teasers.', handle:'@playzeramon', href:'#',
-      bg:'linear-gradient(150deg,#2a2a2a,#000)', glow:'#5EE6FF',
-      icon:'<svg viewBox="0 0 24 24" fill="#fff"><path d="M16.5 3c.4 2.2 1.9 3.8 4.5 4v3c-1.6 0-3.1-.5-4.5-1.4v6.6c0 3.4-2.7 6.1-6.1 6.1S4.3 18.6 4.3 15.2 7 9.1 10.4 9.1c.4 0 .8 0 1.2.1v3.1c-.4-.1-.8-.2-1.2-.2-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3V3h3.1z"/></svg>'
-    },
-    {
-      title:'YouTube', desc:'Trailers, devlogs & deep dives.', handle:'Zeramon', href:'#',
-      bg:'linear-gradient(150deg,#ff5d5d,#b30000)', glow:'#ff5d5d',
-      icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12s0-3.2-.4-4.7c-.3-.9-1-1.6-1.9-1.9C18.2 5 12 5 12 5s-6.2 0-7.7.4c-.9.3-1.6 1-1.9 1.9C2 8.8 2 12 2 12s0 3.2.4 4.7c.3.9 1 1.6 1.9 1.9C5.8 19 12 19 12 19s6.2 0 7.7-.4c.9-.3 1.6-1 1.9-1.9.4-1.5.4-4.7.4-4.7zM10 15.2V8.8L15.5 12 10 15.2z"/></svg>'
-    },
-    {
-      title:'X (Twitter)', desc:'Announcements & behind the scenes.', handle:'@ZeramonGame', href:'#',
-      bg:'linear-gradient(150deg,#2a2a2a,#000)', glow:'#9aa8c7',
-      icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.3 3h3.2l-7 8 8.2 10h-6.4l-5-6.5L3.8 21H.6l7.5-8.6L0 3h6.5l4.5 6z"/></svg>'
-    },
-    {
-      title:'Discord', desc:'Chat, events & player support.', handle:'Join server', href:'https://discord.gg/kvsRArNm8n',
-      bg:'linear-gradient(150deg,#7f95ff,#4a56c9)', glow:'#7f95ff',
-      icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 5.4A17.5 17.5 0 0 0 15.9 4c-.2.4-.5.9-.6 1.3a16.3 16.3 0 0 0-4.6 0c-.2-.4-.4-.9-.6-1.3-1.5.3-3 .8-4.4 1.4C3 9 2.3 12.5 2.6 16c1.7 1.3 3.4 2.1 5 2.6.4-.6.8-1.2 1.1-1.9-.6-.2-1.2-.5-1.7-.9.1-.1.3-.2.4-.3 3.3 1.5 6.9 1.5 10.2 0l.4.3c-.5.4-1.1.7-1.7.9.3.7.7 1.3 1.1 1.9 1.6-.5 3.3-1.3 5-2.6.4-4-.6-7.5-2.1-10.6zM9.7 13.8c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm4.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>'
-    },
-    {
-      title:'Roblox Group', desc:'Join for perks & group rewards.', handle:'Zeramon Official', href:'https://www.roblox.com/communities/5085788',
-      bg:'linear-gradient(150deg,#6E93FF,#1739B0)', glow:'#3B6BFF',
-      icon:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4z"/></svg>'
-    },
-    {
-      title:'Wiki', desc:'Zeramon list, mechanics & guides.', handle:'Read the wiki', href:'#',
-      bg:'linear-gradient(150deg,#5EE6FF,#2554E0)', glow:'#5EE6FF',
-      icon:'<svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H18a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 17.5v-12Z" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H19" stroke="white" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 7h7M8 10h7" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>'
-    }
-  ];
+let counted=false;
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting&&!counted){
+    counted=true;
+    $$('.n').forEach(el=>{
+      const t=parseInt(el.dataset.count,10),sf=el.dataset.suffix||'',t0=performance.now();
+      const tick=now=>{
+        const k=Math.min(1,(now-t0)/2200),v=Math.floor((1-Math.pow(1-k,4))*t);
+        el.textContent=v.toLocaleString('en-US')+(k<1?'':sf);
+        if(k<1)requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    cio.disconnect();
+  }
+}),{threshold:.4});
+cio.observe($('#gp'));
 
-  const team = [
-    { name:'Depx_i', job:'Owner & Developer', group:'Founder', img:'assets/images/team/owner.png' },
-    { name:'MoonLight', job:'Developer', group:'Developer', img:'assets/images/team/dev1.png' },
-    { name:'Tan', job:'Developer', group:'Developer', img:'assets/images/team/dev2.png' },
-    { name:'Haos_Dino', job:'Developer', group:'Developer', img:'assets/images/team/dev3.png' },
-    { name:'Vtnt', job:'Developer', group:'Developer', img:'assets/images/team/dev4.png' },
-    { name:'tommy590590', job:'Developer', group:'Developer', img:'assets/images/team/dev5.png' },
-    { name:'ED', job:'Admin', group:'Staff', img:'assets/images/team/admin.png' },
-    { name:'TeGiyu', job:'Community Manager', group:'Staff', img:'assets/images/team/cm.png' },
-    { name:'Galaxy', job:'QA Manager', group:'Staff', img:'assets/images/team/qa.png' },
-    { name:'Adam', job:'Content Creator Manager', group:'Staff', img:'assets/images/team/ccm.png' }
-  ];
-
-  socials.forEach(it=>{
-    it.kicker = 'Community';
-    it.hudTitle = it.title;
-    it.hudDesc = it.desc;
-    it.tags = [it.handle];
+const L=(a,b,t)=>a+(b-a)*t;
+const tilts=[...$$('.tilt')].map(el=>({el,tx:0,ty:0,cx:0,cy:0}));
+tilts.forEach(s=>{
+  s.el.addEventListener('mousemove',e=>{
+    const b=s.el.getBoundingClientRect(),x=(e.clientX-b.left)/b.width,y=(e.clientY-b.top)/b.height;
+    s.el.style.setProperty('--mx',x*100+'%');s.el.style.setProperty('--my',y*100+'%');
+    s.tx=(x-.5)*14;s.ty=(y-.5)*-14;
   });
-  team.forEach(it=>{
-    it.kicker = it.group;
-    it.hudTitle = it.name;
-    it.hudDesc = it.job;
-    it.tags = [it.group];
-    it.href = '';
+  s.el.addEventListener('mouseleave',()=>{s.tx=0;s.ty=0});
+});
+
+const stage=$('#stage'),sc3=$('#sc3');
+const sg={tx:0,ty:0,cx:0,cy:0};
+stage.addEventListener('mousemove',e=>{
+  const b=stage.getBoundingClientRect();
+  sg.tx=((e.clientX-b.left)/b.width-.5)*26;
+  sg.ty=((e.clientY-b.top)/b.height-.5)*-22;
+});
+stage.addEventListener('mouseleave',()=>{sg.tx=0;sg.ty=0});
+
+const mags=[...$$('.mag')].map(el=>({el,tx:0,ty:0,cx:0,cy:0}));
+mags.forEach(s=>{
+  s.el.addEventListener('mousemove',e=>{
+    const b=s.el.getBoundingClientRect();
+    s.tx=(e.clientX-b.left-b.width/2)*.2;s.ty=(e.clientY-b.top-b.height/2)*.3;
   });
+  s.el.addEventListener('mouseleave',()=>{s.tx=0;s.ty=0});
+});
 
-  function socialFace(it){
-    return '<div class="pc social"><div class="pc-glow" style="--g:' + it.glow + '"></div>' +
-      '<div class="pc-top"><span class="pc-ico" style="background:' + it.bg + '">' + it.icon + '</span><span class="pc-ghost">' + it.title + '</span></div>' +
-      '<div class="pc-bottom"><h3>' + it.title + '</h3><p>' + it.desc + '</p><span class="pc-handle">' + it.handle + ICON_ARROW + '</span></div>' +
-      '<div class="pc-dim"></div></div>';
-  }
-  function teamFace(it){
-    return '<div class="pc teamc"><div class="pc-glow" style="--g:#3B6BFF"></div>' +
-      '<div class="pc-avatar" style="background-image:url(\'' + it.img + '\')"></div>' +
-      '<div class="pc-info"><span class="pc-tag">' + it.group + '</span><h3>' + it.name + '</h3><span class="pc-job">' + it.job + '</span></div>' +
-      '<div class="pc-dim"></div></div>';
-  }
+const glow=$('#glow');
+const gm={tx:innerWidth/2,ty:innerHeight/2,cx:innerWidth/2,cy:innerHeight/2};
+addEventListener('mousemove',e=>{gm.tx=e.clientX;gm.ty=e.clientY});
 
-  const SLICES = window.innerWidth < 700 ? 8 : 12;
-  let PW = 520, PH = 333, SW = PW / SLICES;
-
-  function buildCarousel(host, items, faceFn){
-    const car = { host, items, panels: [], n: items.length };
-    items.forEach((it, idx)=>{
-      const el = document.createElement('div');
-      el.className = 'panel';
-      const slices = [];
-      const html = faceFn(it);
-      for(let i = 0; i < SLICES; i++){
-        const s = document.createElement('div');
-        s.className = 'slice';
-        s.style.setProperty('--i', i);
-        s.setAttribute('aria-hidden', 'true');
-        s.innerHTML = '<div class="slice-inner">' + html + '</div>';
-        el.appendChild(s);
-        slices.push(s);
-      }
-      const hit = document.createElement('button');
-      hit.className = 'panel-hit';
-      hit.type = 'button';
-      hit.setAttribute('aria-label', it.title || it.name);
-      el.appendChild(hit);
-      host.appendChild(el);
-      const panel = { el, slices, hit, idx, hidden: false, d: 99 };
-      hit.addEventListener('click', ()=>{
-        if(Math.abs(panel.d) > 0.35){
-          scrollToItem(car, idx);
-        }else if(it.href && it.href !== '#'){
-          window.open(it.href, '_blank', 'noopener');
-        }
-      });
-      car.panels.push(panel);
-    });
-    return car;
-  }
-
-  const carLinks = buildCarousel($('carLinks'), socials, socialFace);
-  const carTeam = buildCarousel($('carTeam'), team, teamFace);
-
-  document.querySelectorAll('[data-words]').forEach(el=>{
-    const words = el.textContent.trim().split(/\s+/);
-    el.textContent = '';
-    words.forEach((word, i)=>{
-      const mask = document.createElement('span');
-      mask.className = 'w';
-      const inner = document.createElement('span');
-      inner.className = 'wi';
-      inner.textContent = word;
-      inner.style.transitionDelay = (i * 70) + 'ms';
-      mask.appendChild(inner);
-      el.appendChild(mask);
-      el.appendChild(document.createTextNode(' '));
-    });
+(function frame(){
+  tilts.forEach(s=>{
+    s.cx=L(s.cx,s.tx,.12);s.cy=L(s.cy,s.ty,.12);
+    s.el.style.setProperty('--ry',s.cx.toFixed(2)+'deg');
+    s.el.style.setProperty('--rx',s.cy.toFixed(2)+'deg');
   });
-
-  const joinH2 = $('joinH2');
-  const joinWords = [];
-  (function(){
-    const words = joinH2.textContent.trim().split(/\s+/);
-    joinH2.textContent = '';
-    words.forEach(word=>{
-      const span = document.createElement('span');
-      span.className = 'jw';
-      span.textContent = word;
-      joinH2.appendChild(span);
-      joinH2.appendChild(document.createTextNode(' '));
-      joinWords.push(span);
-    });
-  })();
-
-  document.querySelectorAll('[data-stagger]').forEach(group=>{
-    Array.from(group.children).forEach((child, i)=>{
-      child.style.setProperty('--d', (200 + i * 110) + 'ms');
-    });
+  sg.cx=L(sg.cx,sg.tx,.08);sg.cy=L(sg.cy,sg.ty,.08);
+  sc3.style.setProperty('--ry',sg.cx.toFixed(2)+'deg');
+  sc3.style.setProperty('--rx',sg.cy.toFixed(2)+'deg');
+  mags.forEach(s=>{
+    s.cx=L(s.cx,s.tx,.15);s.cy=L(s.cy,s.ty,.15);
+    s.el.style.transform=`translate(${s.cx.toFixed(2)}px,${s.cy.toFixed(2)}px)`;
   });
+  gm.cx=L(gm.cx,gm.tx,.07);gm.cy=L(gm.cy,gm.ty,.07);
+  glow.style.transform=`translate(${gm.cx-260}px,${gm.cy-260}px)`;
+  requestAnimationFrame(frame);
+})();
 
-  const SCENES = [
-    { id:'hero', len:110 },
-    { id:'game', len:150 },
-    { id:'links', len:100 + 50 * (socials.length - 1), car:carLinks },
-    { id:'team', len:100 + 40 * (team.length - 1), car:carTeam },
-    { id:'join', len:230 },
-    { id:'footer', len:100 }
-  ];
-  const OVER = 40;
-  SCENES.forEach(sc=>{
-    sc.el = $('scene-' + sc.id);
-    sc.live = false;
-    sc.w = 0;
+const cv=$('#fx'),cx=cv.getContext('2d');
+let W,H,pts=[];
+function size(){
+  W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;
+  pts=Array.from({length:Math.min(60,Math.floor(W/24))},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+.6,v:Math.random()*.35+.12,d:Math.random()*.3-.15}));
+}
+size();addEventListener('resize',size);
+(function loop(){
+  cx.clearRect(0,0,W,H);
+  pts.forEach(q=>{
+    q.y-=q.v;q.x+=q.d;
+    if(q.y<-10){q.y=H+10;q.x=Math.random()*W}
+    cx.beginPath();cx.arc(q.x,q.y,q.r,0,6.283);
+    cx.fillStyle='rgba(140,225,255,'+(.2+q.r/6)+')';
+    cx.shadowColor='#62E6FF';cx.shadowBlur=10;cx.fill();
   });
-  const sceneIndex = {};
-  SCENES.forEach((sc, i)=>{ sceneIndex[sc.id] = i; });
-
-  const spacer = $('spacer');
-  let vw = window.innerWidth;
-  let vh = window.innerHeight;
-  let total = 1;
-
-  function layout(){
-    vw = window.innerWidth;
-    vh = window.innerHeight;
-    let cursor = 0;
-    SCENES.forEach((sc, i)=>{
-      sc.start = cursor;
-      sc.end = cursor + sc.len * vh / 100;
-      cursor = sc.end - OVER * vh / 100;
-    });
-    total = SCENES[SCENES.length - 1].end;
-    spacer.style.height = (total + vh) + 'px';
-
-    const mobile = vw < 700;
-    PW = mobile ? Math.min(vw * 0.8, 420) : Math.min(560, Math.max(320, vw * 0.4));
-    PH = PW * (mobile ? 0.78 : 0.64);
-    if(!mobile && vh < 720){
-      PW = Math.min(PW, vh * 0.7);
-      PH = PW * 0.64;
-    }
-    SW = PW / SLICES;
-    root.style.setProperty('--pw', PW.toFixed(1) + 'px');
-    root.style.setProperty('--ph', PH.toFixed(1) + 'px');
-    root.style.setProperty('--sw', SW.toFixed(3) + 'px');
-
-    envResize();
-    dirty = true;
-  }
-
-  function bounds(i){
-    const sc = SCENES[i];
-    const inL = OVER * vh / 100;
-    const first = i === 0;
-    const last = i === SCENES.length - 1;
-    return { a: sc.start + (first ? 0 : inL), b: sc.end - (last ? 0 : inL), inL };
-  }
-
-  function sceneState(i, s){
-    const sc = SCENES[i];
-    const bd = bounds(i);
-    const first = i === 0;
-    const last = i === SCENES.length - 1;
-    const inW = first ? 1 : smooth(clamp((s - sc.start) / bd.inL));
-    const outW = last ? 1 : 1 - smooth(clamp((s - (sc.end - bd.inL)) / bd.inL));
-    const t = clamp((s - bd.a) / Math.max(1, bd.b - bd.a));
-    return { inW, outW, w: inW * outW, t };
-  }
-
-  function scrollToScene(id, instant){
-    const i = sceneIndex[id];
-    if(i == null) return;
-    const bd = bounds(i);
-    window.scrollTo({ top: Math.round(bd.a), behavior: (reduceMotion || instant) ? 'auto' : 'smooth' });
-  }
-
-  function itemPx(sceneI, k, n){
-    const bd = bounds(sceneI);
-    return bd.a + (n > 1 ? k / (n - 1) : 0) * (bd.b - bd.a);
-  }
-
-  function scrollToItem(car, k){
-    const i = SCENES.findIndex(sc=> sc.car === car);
-    window.scrollTo({ top: Math.round(itemPx(i, k, car.n)), behavior: reduceMotion ? 'auto' : 'smooth' });
-  }
-
-  document.querySelectorAll('[data-goto]').forEach(el=>{
-    el.addEventListener('click', (e)=>{
-      e.preventDefault();
-      scrollToScene(el.getAttribute('data-goto'));
-    });
-  });
-
-  const envCanvas = $('env');
-  const ctx = envCanvas.getContext('2d');
-  let envW = 0, envH = 0, dpr = 1;
-  const particles = [];
-  for(let i = 0; i < 70; i++){
-    particles.push({ a: Math.random() * Math.PI * 2, k: Math.random(), s: 0.6 + Math.random() * 1.4 });
-  }
-  function envResize(){
-    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    envW = vw;
-    envH = vh;
-    envCanvas.width = Math.round(envW * dpr);
-    envCanvas.height = Math.round(envH * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  /* ===== Tunnel texturé : les images de fond sont plaquées sur le sol, le plafond et les murs ===== */
-  const TUNNEL_IMGS = ['background1','background4','background2'].map(n=>{
-    const im = new Image();
-    im.src = 'assets/images/' + n + '.png';
-    return im;
-  });
-  const envMix = [1, 0, 0];
-  const TUN = { N:15, M:56, TILE:3, SMAX:1.3 };
-
-  function drawTunnel(shift, vx, vy, lnMin, lnMax){
-    const W = envW, H = envH;
-    const range = lnMax - lnMin;
-    const uMax = (Math.log(TUN.SMAX) - lnMin) / range;
-    const du = uMax / TUN.M;
-    const dV = TUN.N * du / TUN.TILE;
-    const hw = TUN.SMAX * W / 2, hh = TUN.SMAX * H / 2;
-
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = '#040816';
-    ctx.fillRect(0, 0, W, H);
-
-    for(let k = 0; k < 3; k++){
-      const a = envMix[k];
-      const img = TUNNEL_IMGS[k];
-      if(a < 0.01 || !img.complete || !img.naturalWidth) continue;
-      const iw = img.naturalWidth, ih = img.naturalHeight;
-      ctx.globalAlpha = a;
-
-      for(let wall = 0; wall < 4; wall++){
-        const rows = wall < 2;
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(vx, vy);
-        if(wall === 0){ ctx.lineTo(vx - hw, vy - hh); ctx.lineTo(vx + hw, vy - hh); }
-        if(wall === 1){ ctx.lineTo(vx - hw, vy + hh); ctx.lineTo(vx + hw, vy + hh); }
-        if(wall === 2){ ctx.lineTo(vx - hw, vy - hh); ctx.lineTo(vx - hw, vy + hh); }
-        if(wall === 3){ ctx.lineTo(vx + hw, vy - hh); ctx.lineTo(vx + hw, vy + hh); }
-        ctx.closePath();
-        ctx.clip();
-        if(wall === 1){ ctx.translate(0, 2 * vy); ctx.scale(1, -1); }
-        if(wall === 3){ ctx.translate(2 * vx, 0); ctx.scale(-1, 1); }
-
-        const seg = (s0, s1, v0, v1)=>{
-          if(v1 - v0 <= 0) return;
-          if(rows){
-            ctx.drawImage(img, 0, v0 * ih, iw, (v1 - v0) * ih,
-              vx - s1 * W / 2, vy - s1 * H / 2 - 1, s1 * W, (s1 - s0) * H / 2 + 2);
-          }else{
-            ctx.drawImage(img, v0 * iw, 0, (v1 - v0) * iw, ih,
-              vx - s1 * W / 2 - 1, vy - s1 * H / 2, (s1 - s0) * W / 2 + 2, s1 * H);
-          }
-        };
-
-        for(let j = 0; j < TUN.M; j++){
-          const uA = j * du, uB = uA + du;
-          const sA = Math.exp(lnMin + uA * range);
-          const sB = Math.exp(lnMin + uB * range);
-          let q = (-(TUN.N * (uA - shift)) / TUN.TILE) % 1;
-          if(q < 0) q += 1;
-          if(q - dV >= 0){
-            seg(sA, sB, q - dV, q);
-          }else{
-            const f = q / dV;
-            const sM = sA + (sB - sA) * f;
-            seg(sA, sM, 0, q);
-            seg(sM, sB, 1 - (dV - q), 1);
-          }
-        }
-        ctx.restore();
-      }
-    }
-    ctx.globalAlpha = 1;
-
-    ctx.fillStyle = 'rgba(4,8,22,.5)';
-    ctx.fillRect(0, 0, W, H);
-    let g = ctx.createRadialGradient(W * .15, 0, 0, W * .15, 0, W * .9);
-    g.addColorStop(0, 'rgba(59,107,255,.3)');
-    g.addColorStop(1, 'rgba(59,107,255,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
-    g = ctx.createRadialGradient(vx, vy, 0, vx, vy, Math.max(W, H) * .5);
-    g.addColorStop(0, 'rgba(4,8,22,.95)');
-    g.addColorStop(.35, 'rgba(8,17,43,.55)');
-    g.addColorStop(1, 'rgba(4,8,22,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
-  }
-
-  function drawEnv(shift, mx, my, energy){
-    const vx = envW / 2 + mx * 70;
-    const vy = envH * 0.48 + my * 50;
-    const lnMin = Math.log(0.05);
-    const lnMax = Math.log(2.8);
-    drawTunnel(shift, vx, vy, lnMin, lnMax);
-    const maxD = Math.max(envW, envH) * 0.75;
-    for(let i = 0; i < particles.length; i++){
-      const p = particles[i];
-      let u = (p.k + shift * 1.7 * p.s) % 1;
-      if(u < 0) u += 1;
-      const dist = Math.pow(u, 2.2) * maxD;
-      const x = vx + Math.cos(p.a) * dist;
-      const y = vy + Math.sin(p.a) * dist;
-      const al = Math.sin(Math.PI * u) * 0.75;
-      ctx.fillStyle = 'rgba(170,225,255,' + al.toFixed(3) + ')';
-      const r = 0.5 + u * 1.8;
-      ctx.fillRect(x - r / 2, y - r / 2, r, r);
-    }
-  }
-
-  const shardsEl = $('shards');
-  const shards = [];
-  (function(){
-    let seed = 7;
-    const rnd = ()=>{ seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    for(let i = 0; i < 11; i++){
-      const el = document.createElement('div');
-      el.className = 'shard s' + (i % 3);
-      const sz = 90 + rnd() * 190;
-      el.style.setProperty('--sz', sz.toFixed(0) + 'px');
-      shardsEl.appendChild(el);
-      shards.push({ el, k: i / 11, x: (rnd() - 0.5) * 1.5, y: (rnd() - 0.5) * 1.2, rx: rnd() * 360, ry: rnd() * 360, rz: rnd() * 360, sp: 0.6 + rnd() * 0.9 });
-    }
-  })();
-
-  function drawShards(shift, time){
-    for(let i = 0; i < shards.length; i++){
-      const sh = shards[i];
-      let u = (sh.k + shift * 1.3) % 1;
-      if(u < 0) u += 1;
-      const z = -2600 + u * 3000;
-      const op = Math.pow(Math.sin(Math.PI * u), 1.5) * 0.55;
-      const x = sh.x * vw * 0.5;
-      const y = sh.y * vh * 0.5;
-      sh.el.style.opacity = op.toFixed(3);
-      sh.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,' + z.toFixed(1) + 'px) rotateX(' + (sh.rx + time * 0.012 * sh.sp + shift * 400).toFixed(1) + 'deg) rotateY(' + (sh.ry + time * 0.016 * sh.sp + shift * 500).toFixed(1) + 'deg) rotateZ(' + (sh.rz + time * 0.006).toFixed(1) + 'deg)';
-    }
-  }
-
-  const hud = $('hud');
-  const hudKicker = $('hudKicker');
-  const hudTitle = $('hudTitle');
-  const hudDesc = $('hudDesc');
-  const hudTags = $('hudTags');
-  const hudMore = $('hudMore');
-  let hudKey = '';
-  let hudTimer = 0;
-
-  function setHud(car, idx, label){
-    const key = label + ':' + idx;
-    if(key === hudKey) return;
-    hudKey = key;
-    const it = car.items[idx];
-    hudKicker.textContent = it.kicker + '  ·  ' + String(idx + 1).padStart(2, '0') + ' / ' + String(car.n).padStart(2, '0');
-    hudTitle.textContent = it.hudTitle;
-    hudDesc.textContent = it.hudDesc;
-    hudTags.innerHTML = '';
-    it.tags.forEach(tag=>{
-      const span = document.createElement('span');
-      span.textContent = tag;
-      hudTags.appendChild(span);
-    });
-    if(it.href && it.href !== '#'){
-      hudMore.href = it.href;
-      hudMore.hidden = false;
-    }else{
-      hudMore.hidden = true;
-    }
-    hud.classList.remove('swap');
-    void hud.offsetWidth;
-    hud.classList.add('swap');
-    clearTimeout(hudTimer);
-    hudTimer = setTimeout(()=> hud.classList.remove('swap'), 900);
-  }
-
-  function updateCarousel(car, pos, bend){
-    const R_MIN = 0.01;
-    for(let i = 0; i < car.panels.length; i++){
-      const p = car.panels[i];
-      const d = i - pos;
-      const ad = Math.abs(d);
-      p.d = d;
-      if(ad > 3.4){
-        if(!p.hidden){
-          p.el.style.display = 'none';
-          p.hidden = true;
-        }
-        continue;
-      }
-      if(p.hidden){
-        p.el.style.display = '';
-        p.hidden = false;
-      }
-      const cd = Math.max(-2, Math.min(2, d));
-      const x = d * PW * 0.8;
-      const z = -Math.min(ad, 2.4) * 240;
-      const ry = -cd * 26;
-      const sc = 1 - 0.07 * Math.min(ad, 2);
-      p.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,' + z.toFixed(1) + 'px) rotateY(' + ry.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
-      p.el.style.setProperty('--dim', (Math.min(ad, 2) * 0.28).toFixed(3));
-      p.el.style.setProperty('--sheen', (50 - d * 38).toFixed(1) + '%');
-      p.hit.style.pointerEvents = ad < 2.6 ? 'auto' : 'none';
-      const theta = Math.max(R_MIN, 0.46 + 0.16 * Math.min(ad, 2) + bend);
-      const R = PW / theta;
-      for(let s = 0; s < SLICES; s++){
-        const a = (s + 0.5 - SLICES / 2) * (theta / SLICES);
-        const px = R * Math.sin(a) - SW / 2;
-        const pz = R * (1 - Math.cos(a));
-        p.slices[s].style.transform = 'translate3d(' + px.toFixed(2) + 'px,' + (-PH / 2).toFixed(1) + 'px,' + pz.toFixed(2) + 'px) rotateY(' + (-a).toFixed(4) + 'rad)';
-      }
-    }
-  }
-
-  let target = window.scrollY;
-  let cur = target;
-  let dirty = true;
-  let mxT = 0, myT = 0, mx = 0, my = 0;
-  let lastTime = performance.now();
-  let countersStarted = false;
-  let activeScene = 0;
-
-  const bg1 = $('bg1');
-  const bg4 = $('bg4');
-  const bg2 = $('bg2');
-  const progressBar = $('progress');
-  const siteNav = $('siteNav');
-  const navLinks = $('navLinks');
-  const navIndicator = $('navIndicator');
-  const spyLinks = Array.from(navLinks.querySelectorAll('a'));
-  const sideButtons = Array.from(document.querySelectorAll('#sideIndex button'));
-  const joinRest = $('joinRest');
-  const hexScene = $('hexScene');
-  const cursorGlow = $('cursorGlow');
-  let activeLink = null;
-
-  function placeIndicator(link){
-    if(!link){
-      navIndicator.style.opacity = 0;
-      return;
-    }
-    navIndicator.style.opacity = 1;
-    navIndicator.style.width = link.offsetWidth + 'px';
-    navIndicator.style.transform = 'translateX(' + link.offsetLeft + 'px)';
-  }
-  spyLinks.forEach(link=>{
-    link.addEventListener('mouseenter', ()=> placeIndicator(link));
-    link.addEventListener('focus', ()=> placeIndicator(link));
-  });
-  navLinks.addEventListener('mouseleave', ()=> placeIndicator(activeLink));
-
-  function startCounters(){
-    if(countersStarted) return;
-    countersStarted = true;
-    document.querySelectorAll('.stat-num').forEach(el=>{
-      const targetVal = parseInt(el.getAttribute('data-count'), 10);
-      const suffix = el.getAttribute('data-suffix') || '';
-      const duration = 2200;
-      const start = performance.now();
-      function tickCount(now){
-        const t = Math.min(1, (now - start) / duration);
-        const eased = 1 - Math.pow(1 - t, 4);
-        el.textContent = Math.floor(eased * targetVal).toLocaleString('en-US') + suffix;
-        if(t < 1) requestAnimationFrame(tickCount);
-        else el.textContent = targetVal.toLocaleString('en-US') + suffix;
-      }
-      requestAnimationFrame(tickCount);
-    });
-  }
-
-  function applyScenes(){
-    const s = cur;
-    const vel = target - cur;
-    const bend = Math.min(Math.abs(vel) / (vh * 0.5), 1) * 0.5;
-    let best = 0;
-    let bestW = -1;
-    const states = [];
-    for(let i = 0; i < SCENES.length; i++){
-      const sc = SCENES[i];
-      const st = sceneState(i, s);
-      states.push(st);
-      sc.w = st.w;
-      if(st.w > bestW){
-        bestW = st.w;
-        best = i;
-      }
-      const el = sc.el;
-      if(st.w < 0.004){
-        if(el.style.visibility !== 'hidden') el.style.visibility = 'hidden';
-        el.style.pointerEvents = 'none';
-        el.style.opacity = '0';
-        if(sc.live){
-          sc.live = false;
-          el.classList.remove('live');
-        }
-        continue;
-      }
-      el.style.visibility = 'visible';
-      el.style.opacity = st.w >= 0.999 ? '1' : st.w.toFixed(3);
-      const scale = (1 - (1 - st.inW) * 0.38) * (1 + (1 - st.outW) * 0.5);
-      el.style.transform = (scale > 0.9995 && scale < 1.0005) ? 'none' : 'scale(' + scale.toFixed(4) + ')';
-      el.style.pointerEvents = st.w > 0.6 ? 'auto' : 'none';
-      if(!sc.live && st.w > 0.55){
-        sc.live = true;
-        el.classList.add('live');
-        if(sc.id === 'game') startCounters();
-      }else if(sc.live && st.w < 0.15){
-        sc.live = false;
-        el.classList.remove('live');
-      }
-      if(sc.car){
-        const pos = st.t * (sc.car.n - 1);
-        updateCarousel(sc.car, pos, bend);
-      }
-    }
-
-    const iJoin = sceneIndex.join;
-    const stJ = states[iJoin];
-    if(stJ.w > 0.004){
-      const n = joinWords.length;
-      for(let j = 0; j < n; j++){
-        const startJ = (j / n) * 0.55;
-        const l = smooth(clamp((stJ.t - startJ) / 0.07));
-        const el = joinWords[j];
-        el.style.opacity = (0.16 + 0.84 * l).toFixed(3);
-        el.style.transform = 'translateY(' + ((1 - l) * 14).toFixed(1) + 'px)';
-      }
-      if(stJ.t > 0.6) joinRest.classList.add('on');
-      else if(stJ.t < 0.5) joinRest.classList.remove('on');
-    }
-
-    const iL = sceneIndex.links, iT = sceneIndex.team;
-    const wL = states[iL].w, wT = states[iT].w;
-    const hudW = Math.max(wL, wT);
-    if(hudW > 0.01){
-      hud.style.visibility = 'visible';
-      hud.style.opacity = hudW.toFixed(3);
-      if(wL >= wT){
-        const idx = clamp(Math.round(states[iL].t * (carLinks.n - 1)), 0, carLinks.n - 1);
-        setHud(carLinks, idx, 'links');
-      }else{
-        const idx = clamp(Math.round(states[iT].t * (carTeam.n - 1)), 0, carTeam.n - 1);
-        setHud(carTeam, idx, 'team');
-      }
-    }else{
-      hud.style.opacity = '0';
-      hud.style.visibility = 'hidden';
-    }
-
-    const wHero = states[0].w, wGame = states[1].w, wJoin = states[iJoin].w, wFoot = states[SCENES.length - 1].w;
-    bg1.style.opacity = clamp(wHero + wGame * 0.55).toFixed(3);
-    bg4.style.opacity = clamp(wL + wT).toFixed(3);
-    bg2.style.opacity = clamp(wJoin + wFoot).toFixed(3);
-    envMix[0] = clamp(wHero + wGame * 0.55);
-    envMix[1] = clamp(wL + wT);
-    envMix[2] = clamp(wJoin + wFoot);
-
-    progressBar.style.transform = 'scaleX(' + clamp(s / total).toFixed(4) + ')';
-    siteNav.classList.toggle('scrolled', s > 40);
-
-    if(best !== activeScene){
-      activeScene = best;
-    }
-    sideButtons.forEach(btn=>{
-      btn.classList.toggle('active', btn.getAttribute('data-goto') === SCENES[best].id);
-    });
-    let link = null;
-    spyLinks.forEach(l=>{
-      const on = l.getAttribute('data-goto') === SCENES[best].id;
-      l.classList.toggle('active', on);
-      if(on) link = l;
-    });
-    if(link !== activeLink){
-      activeLink = link;
-      placeIndicator(activeLink);
-    }
-  }
-
-  function tick(now){
-    const dt = Math.min(64, now - lastTime);
-    lastTime = now;
-    const k = reduceMotion ? 1 : 1 - Math.pow(1 - 0.085, dt / 16.667);
-    const prev = cur;
-    cur += (target - cur) * k;
-    if(Math.abs(target - cur) < 0.05) cur = target;
-    const pmx = mx, pmy = my;
-    if(!reduceMotion){
-      const km = 1 - Math.pow(1 - 0.07, dt / 16.667);
-      mx += (mxT - mx) * km;
-      my += (myT - my) * km;
-    }
-    if(dirty || cur !== prev || Math.abs(mx - pmx) > 0.00005 || Math.abs(my - pmy) > 0.00005){
-      applyScenes();
-      dirty = false;
-    }
-    root.style.setProperty('--px', (mx * 60).toFixed(1) + 'px');
-    root.style.setProperty('--py', (my * 40).toFixed(1) + 'px');
-    hexScene.style.transform = 'rotateX(' + (8 - my * 20).toFixed(2) + 'deg) rotateY(' + (-10 + mx * 30).toFixed(2) + 'deg)';
-
-    const time = reduceMotion ? 0 : now;
-    const speed = Math.abs(target - cur) / vh;
-    const shift = cur / (vh * 11) + time * 0.00002;
-    drawEnv(shift, mx, my, Math.min(speed * 2, 1));
-    drawShards(shift, time);
-    requestAnimationFrame(tick);
-  }
-
-  let snapTimer = 0;
-  function scheduleSnap(){
-    if(!finePointer || reduceMotion) return;
-    clearTimeout(snapTimer);
-    snapTimer = setTimeout(()=>{
-      const s = window.scrollY;
-      for(let i = 0; i < SCENES.length; i++){
-        const sc = SCENES[i];
-        if(!sc.car) continue;
-        const st = sceneState(i, s);
-        if(st.w < 0.98) continue;
-        const n = sc.car.n;
-        const idx = clamp(Math.round(st.t * (n - 1)), 0, n - 1);
-        const px = itemPx(i, idx, n);
-        if(Math.abs(px - s) > 3){
-          window.scrollTo({ top: Math.round(px), behavior: 'smooth' });
-        }
-      }
-    }, 240);
-  }
-
-  window.addEventListener('scroll', ()=>{
-    target = window.scrollY;
-    scheduleSnap();
-  }, { passive: true });
-  window.addEventListener('resize', ()=>{
-    layout();
-    target = window.scrollY;
-    placeIndicator(activeLink);
-  });
-  window.addEventListener('pointermove', (e)=>{
-    mxT = e.clientX / vw - 0.5;
-    myT = e.clientY / vh - 0.5;
-  });
-
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape') closeMenu();
-    if(e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-    for(let i = 0; i < SCENES.length; i++){
-      const sc = SCENES[i];
-      if(!sc.car) continue;
-      const st = sceneState(i, window.scrollY);
-      if(st.w < 0.6) continue;
-      const n = sc.car.n;
-      const idx = clamp(Math.round(st.t * (n - 1)) + (e.key === 'ArrowRight' ? 1 : -1), 0, n - 1);
-      e.preventDefault();
-      scrollToItem(sc.car, idx);
-      return;
-    }
-  });
-
-  const navToggle = $('navToggle');
-  const mobileMenu = $('mobileMenu');
-  function closeMenu(){
-    navToggle.classList.remove('open');
-    mobileMenu.classList.remove('open');
-    navToggle.setAttribute('aria-expanded', 'false');
-  }
-  navToggle.addEventListener('click', ()=>{
-    const isOpen = mobileMenu.classList.toggle('open');
-    navToggle.classList.toggle('open', isOpen);
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-  mobileMenu.querySelectorAll('[data-menu-link]').forEach(link=> link.addEventListener('click', closeMenu));
-
-  if(finePointer && !reduceMotion){
-    document.querySelectorAll('.tilt').forEach(el=>{
-      const max = parseFloat(el.dataset.tilt || 8);
-      el.addEventListener('pointermove', (e)=>{
-        const r = el.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
-        el.style.setProperty('--ry', ((px - .5) * 2 * max).toFixed(2) + 'deg');
-        el.style.setProperty('--rx', ((.5 - py) * 2 * max).toFixed(2) + 'deg');
-        el.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-        el.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-      });
-      el.addEventListener('pointerleave', ()=>{
-        el.style.setProperty('--rx', '0deg');
-        el.style.setProperty('--ry', '0deg');
-      });
-    });
-    document.querySelectorAll('.card:not(.tilt)').forEach(el=>{
-      el.addEventListener('pointermove', (e)=>{
-        const r = el.getBoundingClientRect();
-        el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
-        el.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
-      });
-    });
-    document.querySelectorAll('.magnetic').forEach(el=>{
-      el.addEventListener('pointermove', (e)=>{
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - (r.left + r.width / 2)) * 0.28;
-        const y = (e.clientY - (r.top + r.height / 2)) * 0.4;
-        el.style.translate = x + 'px ' + y + 'px';
-      });
-      el.addEventListener('pointerleave', ()=>{
-        el.style.transition = 'translate .6s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s cubic-bezier(.16,1,.3,1), background-position .7s ease, border-color .3s ease';
-        el.style.translate = '0 0';
-      });
-      el.addEventListener('pointerenter', ()=>{ el.style.transition = ''; });
-    });
-    let gx = vw / 2, gy = vh / 2, gtx = gx, gty = gy;
-    window.addEventListener('pointermove', (e)=>{
-      gtx = e.clientX;
-      gty = e.clientY;
-      cursorGlow.classList.add('on');
-    });
-    document.addEventListener('pointerleave', ()=> cursorGlow.classList.remove('on'));
-    (function glowLoop(){
-      gx += (gtx - gx) * 0.12;
-      gy += (gty - gy) * 0.12;
-      cursorGlow.style.transform = 'translate3d(' + gx + 'px,' + gy + 'px,0)';
-      requestAnimationFrame(glowLoop);
-    })();
-  }
-
-  const loader = $('loader');
-  const bar = $('loaderBar');
-  const percentEl = $('loaderPercent');
-  let progressValue = 0;
-  const loadTimer = setInterval(()=>{
-    progressValue += Math.random() * 14 + 6;
-    if(progressValue >= 100){
-      progressValue = 100;
-      clearInterval(loadTimer);
-      setTimeout(finishLoading, 400);
-    }
-    percentEl.textContent = Math.floor(progressValue);
-    bar.style.width = progressValue + '%';
-  }, 220);
-
-  function finishLoading(){
-    loader.classList.add('hide');
-    document.body.classList.add('loaded');
-    document.body.classList.remove('locked');
-    const hash = window.location.hash.replace('#', '');
-    if(hash && sceneIndex[hash] != null && hash !== 'hero'){
-      scrollToScene(hash, true);
-    }
-  }
-
-  layout();
-  target = window.scrollY;
-  cur = target;
-  requestAnimationFrame(tick);
+  requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>
