@@ -45,9 +45,6 @@ h1,h2,h3,.display{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.
 #loader::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(43,91,255,.28),transparent 70%);animation:lbreath 4s ease-in-out infinite}
 #loader::after{content:'';position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 50%,transparent 55%,rgba(2,5,16,.75));pointer-events:none}
 @keyframes lbreath{50%{opacity:.5;transform:scale(1.08)}}
-.l-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.l-fx i{position:absolute;bottom:-20px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px 2px rgba(98,230,255,.6);opacity:0;animation:lrise linear infinite}
-@keyframes lrise{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.8}100%{transform:translateY(-105vh) scale(1);opacity:0}}
 .l-core{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:22px;transition:transform 1s var(--out),opacity .7s var(--out),filter .9s var(--out)}
 #loader.done .l-core{transform:scale(1.35);opacity:0;filter:blur(10px)}
 .l-emblem{position:relative;width:240px;height:240px;display:grid;place-items:center;opacity:0;transform:scale(.8);animation:lin 1s var(--out) .1s forwards}
@@ -276,7 +273,6 @@ footer{position:relative;z-index:2;padding:64px 0 34px;border-top:1px solid rgba
 <body>
 
 <div id="loader">
-  <div class="l-fx" id="lfx"></div>
   <div class="l-core">
     <div class="l-emblem">
       <svg viewBox="0 0 200 200" aria-hidden="true">
@@ -549,15 +545,7 @@ const setFinal=el=>{el.dataset.final=Number(el.dataset.count).toLocaleString('en
 $$('.n').forEach(setFinal);
 loadLiveStats();
 
-const lpct=$('#lpct'),lring=$('#lring'),lmsg=$('#lmsg'),lfx=$('#lfx');
-for(let i=0;i<22;i++){
-  const d=document.createElement('i'),z=3+Math.random()*4;
-  d.style.left=(Math.random()*100)+'%';
-  d.style.width=d.style.height=z+'px';
-  d.style.animationDuration=(6+Math.random()*7)+'s';
-  d.style.animationDelay=(-Math.random()*10)+'s';
-  lfx.appendChild(d);
-}
+const lpct=$('#lpct'),lring=$('#lring'),lmsg=$('#lmsg');
 const lmsgs=['Waking up the wild Zeramons','Exploring the regions','Preparing the battle arena','Ready to catch them all'];
 let p=0,pageLoaded=document.readyState==='complete',minTime=false,lidx=0,lfinished=false,lprev=performance.now();
 addEventListener('load',()=>{pageLoaded=true});
