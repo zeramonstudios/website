@@ -40,13 +40,41 @@ h1,h2,h3,.display{font-family:'Bricolage Grotesque',sans-serif;letter-spacing:-.
 .glass:hover::after{opacity:1}
 .glass:hover::before{border-color:rgba(160,200,255,.55);box-shadow:0 50px 90px -30px rgba(2,6,35,.9),0 18px 40px -14px rgba(43,91,255,.6),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -24px 44px rgba(43,91,255,.16)}
 
-#loader{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:radial-gradient(100% 100% at 50% 40%,rgba(13,29,82,.7),rgba(4,9,22,.88)),url('assets/images/background0.png') center/cover no-repeat,var(--ink);transition:opacity .9s var(--out),visibility .9s,transform 1.1s var(--out);transform-origin:50% 50%}
-#loader.done{opacity:0;visibility:hidden;transform:scale(1.08);pointer-events:none}
-.l-core{display:flex;flex-direction:column;align-items:center;gap:30px}
-.l-core img{width:170px;height:170px;object-fit:contain;filter:drop-shadow(0 0 34px rgba(43,91,255,.85));animation:float 3.6s ease-in-out infinite}
-.l-bar{width:220px;height:4px;border-radius:10px;background:rgba(255,255,255,.12);overflow:hidden}
-.l-bar b{display:block;height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--royal),var(--cyan));box-shadow:0 0 14px var(--cyan);transition:width .3s var(--out)}
-.l-pct{font-family:'Bricolage Grotesque';font-size:14px;font-weight:700;color:var(--mist);font-variant-numeric:tabular-nums}
+#loader{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;overflow:hidden;background:radial-gradient(100% 100% at 50% 40%,rgba(13,29,82,.7),rgba(4,9,22,.9)),url('assets/images/background0.png') center/cover no-repeat,var(--ink);transition:opacity .9s var(--out) .15s,visibility .9s .15s}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none}
+#loader::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,rgba(43,91,255,.28),transparent 70%);animation:lbreath 4s ease-in-out infinite}
+#loader::after{content:'';position:absolute;inset:0;background:radial-gradient(120% 120% at 50% 50%,transparent 55%,rgba(2,5,16,.75));pointer-events:none}
+@keyframes lbreath{50%{opacity:.5;transform:scale(1.08)}}
+.l-fx{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.l-fx i{position:absolute;bottom:-20px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px 2px rgba(98,230,255,.6);opacity:0;animation:lrise linear infinite}
+@keyframes lrise{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.8}100%{transform:translateY(-105vh) scale(1);opacity:0}}
+.l-core{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:22px;transition:transform 1s var(--out),opacity .7s var(--out),filter .9s var(--out)}
+#loader.done .l-core{transform:scale(1.35);opacity:0;filter:blur(10px)}
+.l-emblem{position:relative;width:240px;height:240px;display:grid;place-items:center;opacity:0;transform:scale(.8);animation:lin 1s var(--out) .1s forwards}
+@keyframes lin{to{opacity:1;transform:none}}
+.l-emblem svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.l-spin1{transform-origin:100px 100px;animation:lspin 18s linear infinite}
+.l-spin2{transform-origin:100px 100px;animation:lspin 12s linear infinite reverse}
+@keyframes lspin{to{transform:rotate(360deg)}}
+.l-track{fill:none;stroke:rgba(255,255,255,.1);stroke-width:3}
+.l-prog{fill:none;stroke:url(#lgrad);stroke-width:4;stroke-linecap:round;stroke-dasharray:553;stroke-dashoffset:553;transform:rotate(-90deg);transform-origin:100px 100px;filter:drop-shadow(0 0 6px rgba(98,230,255,.8))}
+.l-dash{fill:none;stroke:rgba(160,200,255,.35);stroke-width:1.5;stroke-dasharray:2 9;stroke-linecap:round}
+.l-dash2{fill:none;stroke:rgba(98,230,255,.28);stroke-width:1.5;stroke-dasharray:14 22;stroke-linecap:round}
+.l-emblem img{position:relative;width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 0 30px rgba(43,91,255,.9));animation:float 3.6s ease-in-out infinite}
+.l-title{font-family:'Bricolage Grotesque';font-weight:800;font-size:15px;letter-spacing:.42em;text-transform:uppercase;color:var(--mist);padding-left:.42em;opacity:0;animation:lfade .9s var(--out) .45s forwards}
+.l-pct{font-family:'Bricolage Grotesque';font-size:54px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;background:linear-gradient(100deg,#fff,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:lfade .9s var(--out) .6s forwards}
+.l-pct small{font-size:22px;margin-left:2px}
+.l-msg{height:20px;font-size:14px;font-weight:600;color:var(--mute);opacity:0;animation:lfade .9s var(--out) .75s forwards}
+.l-msg span{display:inline-block;transition:opacity .3s,transform .3s}
+.l-msg span.sw{opacity:0;transform:translateY(6px)}
+@keyframes lfade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:760px){
+  .l-emblem{width:200px;height:200px}
+  .l-emblem img{width:92px;height:92px}
+  .l-pct{font-size:44px}
+  .l-title{font-size:13px}
+}
+
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
 #glow{position:fixed;left:0;top:0;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(98,160,255,.16),transparent 65%);will-change:transform}
@@ -248,10 +276,21 @@ footer{position:relative;z-index:2;padding:64px 0 34px;border-top:1px solid rgba
 <body>
 
 <div id="loader">
+  <div class="l-fx" id="lfx"></div>
   <div class="l-core">
-    <img src="assets/images/zeramonstudio-logo.png" alt="Zeramon Studio">
-    <div class="l-bar"><b id="lbar"></b></div>
-    <div class="l-pct"><span id="lpct">0</span>%</div>
+    <div class="l-emblem">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <defs><linearGradient id="lgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2B5BFF"/><stop offset="1" stop-color="#62E6FF"/></linearGradient></defs>
+        <circle class="l-dash l-spin1" cx="100" cy="100" r="98"/>
+        <circle class="l-dash2 l-spin2" cx="100" cy="100" r="76"/>
+        <circle class="l-track" cx="100" cy="100" r="88"/>
+        <circle class="l-prog" id="lring" cx="100" cy="100" r="88"/>
+      </svg>
+      <img src="assets/images/zeramonstudio-logo.png" alt="Zeramon Studio">
+    </div>
+    <div class="l-title">Zeramon Studio</div>
+    <div class="l-pct"><span id="lpct">0</span><small>%</small></div>
+    <div class="l-msg"><span id="lmsg">Waking up the wild Zeramons</span></div>
   </div>
 </div>
 
@@ -444,7 +483,7 @@ footer{position:relative;z-index:2;padding:64px 0 34px;border-top:1px solid rgba
     <div class="tb rv">
       <div class="tl">Staff</div>
       <div class="tg staff">
-        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/admin.png" alt="Admin"></div><div class="nm z1">ED</div><div class="jb z1">Community & QA Manager</div></div>
+        <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/admin.png" alt="Admin"></div><div class="nm z1">ED</div><div class="jb z1">Admin</div></div>
         <div class="glass tilt mc"><div class="av z2"><img src="assets/images/team/ccm.png" alt="Content Creator Manager"></div><div class="nm z1">nikkx</div><div class="jb z1">Content Creator Manager</div></div>
       </div>
     </div>
@@ -510,14 +549,42 @@ const setFinal=el=>{el.dataset.final=Number(el.dataset.count).toLocaleString('en
 $$('.n').forEach(setFinal);
 loadLiveStats();
 
-const lbar=$('#lbar'),lpct=$('#lpct');
-let p=0;
-const lt=setInterval(()=>{
-  p=Math.min(100,p+Math.random()*13+5);
+const lpct=$('#lpct'),lring=$('#lring'),lmsg=$('#lmsg'),lfx=$('#lfx');
+for(let i=0;i<22;i++){
+  const d=document.createElement('i'),z=3+Math.random()*4;
+  d.style.left=(Math.random()*100)+'%';
+  d.style.width=d.style.height=z+'px';
+  d.style.animationDuration=(6+Math.random()*7)+'s';
+  d.style.animationDelay=(-Math.random()*10)+'s';
+  lfx.appendChild(d);
+}
+const lmsgs=['Waking up the wild Zeramons','Exploring the regions','Preparing the battle arena','Ready to catch them all'];
+let p=0,pageLoaded=document.readyState==='complete',minTime=false,lidx=0,lfinished=false,lprev=performance.now();
+addEventListener('load',()=>{pageLoaded=true});
+setTimeout(()=>{minTime=true},2200);
+setTimeout(()=>{pageLoaded=true;minTime=true},9000);
+function setMsg(i){
+  if(i===lidx)return;
+  lidx=i;
+  lmsg.classList.add('sw');
+  setTimeout(()=>{lmsg.textContent=lmsgs[i];lmsg.classList.remove('sw')},300);
+}
+function loaderFrame(now){
+  const dt=Math.min(.1,(now-lprev)/1000);
+  lprev=now;
+  const cap=(pageLoaded&&minTime)?100:90;
+  p=Math.min(cap,p+(cap-p)*(1-Math.exp(-dt*2.2))+dt*5);
+  if(p>=99.6)p=100;
   lpct.textContent=Math.floor(p);
-  lbar.style.width=p+'%';
-  if(p>=100){clearInterval(lt);setTimeout(start,450)}
-},200);
+  lring.style.strokeDashoffset=(553*(1-p/100)).toFixed(1);
+  setMsg(p<30?0:p<60?1:p<90?2:3);
+  if(p>=100){
+    if(!lfinished){lfinished=true;setTimeout(start,500)}
+    return;
+  }
+  requestAnimationFrame(loaderFrame);
+}
+requestAnimationFrame(loaderFrame);
 function start(){
   $('#loader').classList.add('done');
   document.body.classList.add('go');
